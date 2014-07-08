@@ -1,0 +1,52 @@
+@(message: String, computers: List[Computer])
+
+@import controllers.web.routes
+
+@theModals = {
+	<div class="modal fade" id="myWebModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>This is a modal</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+}
+
+@views.html.web.main(title = message, modals = theModals) {
+	
+	<img class="pull-right" src="@routes.Assets.versioned("images/common/normal-mini.png")" style="margin-top: 10px"></img>
+	
+	<h1>WEB template</h1>
+	<h3>@message <a href="@routes.Application.index">reload</a></h3>
+	
+	<button class="btn btn-primary btn-lg" id="btn-web-modal">Launch demo modal using CoffeeScript</button>
+
+	<h4>Computers:</h4>
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th>Name</th>
+			<th>Introduced</th>
+			<th>Discontinued</th>
+			<th>Company</th>
+		</tr>
+		@computers.map { computer =>
+			<tr>
+				<td>@computer.name</td>
+				<td>@computer.introduced</td>
+				<td>@computer.discontinued</td>
+				<td>@computer.company</td>
+			</tr>
+		}
+	</table>
+
+}

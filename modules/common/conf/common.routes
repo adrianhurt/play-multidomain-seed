@@ -1,0 +1,6 @@
+# COMMON Routes
+# This file defines COMMON application routes (Higher priority routes first)
+# ~~~~
+
+# These are common routes that you may want all services to respond to.
+GET		/status					controllers.common.Application.status
