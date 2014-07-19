@@ -26,13 +26,9 @@ object Common {
 	def moduleSettings (module: String) = settings(moduleName(module)) ++: Seq(
 		includeFilter in (Assets, LessKeys.less) := "*.less",
 		excludeFilter in (Assets, LessKeys.less) := "_*.less",
-		javaOptions in Test += s"-Dconfig.resource=${module}.conf"
-	)
-	// Settings for every service
-	def serviceSettings (theName: String) = moduleSettings(theName) ++: Seq(
 		pipelineStages := Seq(rjs, digest, gzip),
-		RjsKeys.baseUrl := s"javascripts/$theName",
-		RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -> "empty:"))
+		RjsKeys.mainModule := s"main-$module",
+		javaOptions in Test += s"-Dconfig.resource=application.conf"
 	)
 	
 	val commonDependencies = Seq(

@@ -1,8 +1,8 @@
-define ["jquery", "bootstrap", "common/utils"], ($, bootstrap, utils) ->
+define ["jquery", "bootstrap", "admin/otherLib"], ($, bootstrap, otherLib) ->
 
 	############################################################################################################
 	## DOCUMENT IS READY - INIT APP
 	############################################################################################################
 	$ ->
-		$('#btn-web-modal').click (e) ->
-			utils.showModal $('#myWebModal')
+		$('#btn-admin-modal').click (e) ->
+			otherLib.adminShowModalAndDismiss $('#myAdminModal')

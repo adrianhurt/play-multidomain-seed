@@ -1,8 +1,8 @@
-define ["jquery", "bootstrap", "common/utils"], ($, bootstrap, utils) ->
+define ["jquery", "bootstrap", "common/moreUtils"], ($, bootstrap, moreUtils) ->
 
 	############################################################################################################
 	## DOCUMENT IS READY - INIT APP
 	############################################################################################################
 	$ ->
-		$('#btn-admin-modal').click (e) ->
-			utils.showModal $('#myAdminModal')
+		$('#btn-web-modal').click (e) ->
+			moreUtils.showModalAndDismiss $('#myWebModal')

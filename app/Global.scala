@@ -14,7 +14,7 @@ object Global extends GlobalSettings {
 		else if (subdomain == "admin")
 			admin.Routes.routes.lift(request)
 		else
-			None	//super.onRouteRequest(req)
+			None	//super.onRouteRequest(request)
 	}
 	
 	

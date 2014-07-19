@@ -98,8 +98,7 @@
 				</li>
 				<li>
 					<a href="#code/conf/application.conf" class="shortcut">conf/application.conf</a> <em>(used when whole project is running)</em>:
-					the default one. It specifies the <code>conf/routes</code> and <code>app/Global.scala</code>
-					files for the whole project.
+					the default one. In the next section it is explained in detail.
 				</li>
 				<li>
 					<a href="#code/conf/routes" class="shortcut">conf/routes</a> <em>(used when whole project is running)</em>:
@@ -117,23 +116,19 @@
 			<ul>
 				<li>
 					<a href="#code/modules/admin/build.sbt" class="shortcut">modules/[subproject]/build.sbt</a>:
-					configures the [subproject]. It also declare the corresponding <code>[subproject].conf</code> as
-					the configuration file used for this subproject.</li>
+					configures the [subproject].
 				<li>
-					<a href="#code/modules/admin/conf/admin.conf" class="shortcut">modules/[subproject]/conf/[subproject].conf</a>
-					<em>(used when only this subproject is running)</em>:
-					imports the configuration of <code>conf/application.conf</code> and specifies the routes file and
-					GlobalSettings object for the subproject while running, testing or dist only this subproject.
+					<a href="#code/modules/admin/conf/application.conf" class="shortcut">modules/[subproject]/conf/application.conf</a>
+					<em>(used when only this subproject is running)</em>: the default one, it declares the routes file and
+					GlobalSettings object for the subproject while running, testing or distributing only this subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/conf/admin.routes" class="shortcut">modules/[subproject]/conf/[subproject].routes</a>
-					<em>(used when only this subproject is running)</em>:
-					routes file for this subproject.
+					<em>(used when only this subproject is running)</em>: routes file for this subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/app/GlobalAdmin.scala" class="shortcut">modules/[subproject]/app/Global[Subproject].scala</a>
-					<em>(used when only this subproject is running)</em>:
-					the GlobalSettings object for this subproject.
+					<em>(used when only this subproject is running)</em>: the GlobalSettings object for this subproject.
 				</li>
 			</ul>
 
@@ -150,7 +145,7 @@
 
 			<ul>
 				<li>
-					<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">modules/[subproject]/app/assets/javascripts/[subproject]/</a>:
+					<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>:
 					folder for CoffeeScript files of this subproject. Take care with the last folder for
 					avoid namespace problems while running the whole project.
 				</li>
@@ -191,6 +186,70 @@
 			</p>
 		</div>
 		<div>
+			<h2>Configuration files</h2>
+			
+			<p>
+				As we want to run or test the whole project and also run, test or dist <em>admin</em> and <em>web</em> subprojects,
+				we have several configuration files. Each one has its own particular purpose:
+			</p>
+			
+			<ul>
+				<li>
+					<a href="#code/conf/application.conf" class="shortcut">conf/application.conf</a>:
+					the configuration file that is called by default when the whole project is running.
+					It simply includes the <em>shared.dev.conf</em> file.
+				</li>
+				<li>
+					<a href="#code/conf/shared.dev.conf" class="shortcut">conf/shared.dev.conf</a>:
+					declares all the development configuration shared for the whole project and every subproject.
+				</li>
+
+				<li>
+					<a href="#code/conf/shared.prod.conf" class="shortcut">conf/shared.prod.conf</a>:
+					includes the <em>shared.dev.conf</em> file and overrides every configuration that is specific for
+					production and it is shared for the whole project and every subproject.
+				</li>
+			</ul>
+			
+			<ul>
+				<li>
+					<a href="#code/modules/admin/conf/application.conf" class="shortcut">modules/[subproject]/conf/application.conf</a>:
+					the configuration file that is called by default when the [subproject] is running.
+					It simply includes the <em>shared.dev.conf</em> and <em>[subproject].conf</em> files.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/admin.conf" class="shortcut">modules/[subproject]/conf/[subproject].conf</a>:
+					declares the specific configuration for this subproject for development or production.
+					It must declare the Global object and route file for this subproject.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/prod.conf" class="shortcut">modules/[subproject]/conf/prod.conf</a>:
+					declares the specific configuration for this subproject for production. It includes the
+					<em>shared.prod.conf</em> and <em>[subproject].conf</em> files.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/shared.dev.conf" class="shortcut">modules/[subproject]/conf/shared.dev.conf</a>:
+					it is simply a copy of <em>conf/shared.dev.conf</em>. It must be copied here to beavailable for production distribution.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/shared.prod.conf" class="shortcut">modules/[subproject]/conf/shared.prod.conf</a>:
+					it is simply a copy of <em>conf/shared.prod.conf</em>. It must be copied here to be available for production distribution.
+				</li>
+			</ul>
+			
+			<p>
+				It has been added a key called <em>this.file</em> in many of the configuration files and it is shown in the
+				index web page when you run it. Please, play with it to see how it is overridden by each configuration
+				file depending the project and mode (dev or prod) you are running.
+			</p>
+			
+			<p>
+				<em>Tip:</em> as files <em>shared.dev.conf</em> and <em>shared.prod.conf</em> for every subproject are
+				the same as the general ones, you can use <em>aliases</em> or <em>symbolic links</em> for them in order to
+				avoid to maintain all of them.
+			</p>
+		</div>
+		<div>
 			<h2>Webjars</h2>
 			
 			<p>
@@ -207,13 +266,13 @@
 )</pre>
 
 			<p>
-				And the specific webjars for a subproject are specified in the file
+				And the specific webjars for a subproject are declared in the file
 				<a href="#code/modules/web/build.sbt" class="shortcut">modules/[subproject]/build.sbt</a>.
 				For example, for the <a href="#code/modules/web/build.sbt" class="shortcut">web</a> subproject:
 			</p>
 
 <pre>libraryDependencies ++= Common.commonDependencies ++: Seq(
-  "org.webjars" % "bootswatch-amelia" % "3.2.0"
+  "org.webjars" % "bootswatch-amelia" % "3.2.0-1"
 )</pre>
 
 			<p>
@@ -241,10 +300,9 @@
 
 			<p>
 				The specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">modules/[subproject]/app/assets/javascripts/[subproject]/</a>
-				You could add the files directly in the folder
-				<a href="#code/modules/admin/app/assets/javascripts" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>
-				but you should be careful with namespace collisions.
+				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
+				Take care with possible namespace problems while running the whole project,
+				so it's better to put any file within a subfolder.
 			</p>
 
 			<p>To access to the compiled file you simply have to reference to its JS equivalent:</p>
@@ -315,15 +373,11 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 			</p>
 
 <pre>pipelineStages := Seq(rjs, digest, gzip)
-RjsKeys.baseUrl := s"javascripts/$theName"
-RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -> "empty:"))</pre>
+RjsKeys.mainModule := s"main-$module"</pre>
 
 			<p>
 				The first line declares the asset pipeline. The second one establishes the corresponding
-				folder to each service as the <em>RequireJS baseUrl</em>. Each one has its own subfolder
-				within folder <code>javascripts</code> to avoid namespace collisions. Finally, the third
-				one configures a common folder to share <em>RequireJS modules</em> between subprojects
-				using the <code>common</code> one.
+				<em>RequireJS</em> main config file to each module.
 			</p>
 
 			<p>
@@ -331,12 +385,15 @@ RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -
 				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
 				<a href="#code/modules/common/app/assets/javascripts/common" class="shortcut">modules/common/app/assets/javascripts/common/</a>.
 				And the specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">modules/[subproject]/app/assets/javascripts/[subproject]/</a>.
+				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
+				Take care with possible namespace problems while running the whole project.
+				In the example, the subproject <em>admin</em> has other <em>RJS module</em> within subfolder
+				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">admin</a>.
 			</p>
 
 			<p>Now we just simply need to declare the RequireJS as:</p>
 
-<pre>&lt;script data-main="@routes.Assets.versioned("javascripts/web/main.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"&gt;&lt;/script&gt;</pre>
+<pre>&lt;script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"&gt;&lt;/script&gt;</pre>
 			
 			<p>
 				For more information, go to the documentation page about
@@ -384,12 +441,11 @@ RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -
 			</p>
 
 			<p>
-				If you want to run only one subproject separately, you have to get into the subproject and run
-				using its specific <a href="#code/modules/admin/conf/admin.conf" class="shortcut">configuration file</a>:
+				If you want to run only one subproject separately, you have to get into the subproject and run:
 			</p>
 
 <pre>[play-multidomain-seed] $ project admin
-[play-multidomain-seed-admin] $ run -Dconfig.resource=admin.conf</pre>
+[play-multidomain-seed-admin] $ run</pre>
 		</div>
 		<div>
 			<h2>Test</h2>
@@ -408,12 +464,6 @@ RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -
 <pre>[play-multidomain-seed] $ project admin
 [play-multidomain-seed-admin] $ test</pre>
 
-			<p>
-				In that case is not neccesary to specify the <strong>conf</strong> file because it is
-				done with the configuration (within <a href="#code/project/Common.scala" class="shortcut">Common.scala</a>):
-			</p>
-
-<pre>javaOptions in Test += s"-Dconfig.resource=${module}.conf"</pre>
 		</div>
 		<div>
 			<h2>Production</h2>
@@ -433,10 +483,10 @@ RjsKeys.paths += ("common" -> ("../../../common/app/assets/javascripts/common" -
 
 			<p>So you can extract wherever you want and execute them separately. For example with:</p>
 
-<pre>./play-multidomain-seed-admin-1.0-SNAPSHOT/bin/play-multidomain-seed-admin -Dconfig.resource=admin.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
+<pre>./play-multidomain-seed-admin-1.0-SNAPSHOT/bin/play-multidomain-seed-admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
 
 			<p>
-				Note I have added the <code>&</code> at the end to run the app in the background.
+				Note it is added the <code>&</code> at the end to run the app in the background.
 				The PID will be stored in <code>RUNNING_PID</code> file, so when you want to stop
 				the app, just execute:
 			</p>
