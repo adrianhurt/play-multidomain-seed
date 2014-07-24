@@ -5,11 +5,11 @@ addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.2")
 
 // web plugins
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.0.3-20140717-c49ba1a")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-coffeescript" % "1.0.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.1-20140718-006752e")
+addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-jshint" % "1.0.0")
 

@@ -233,7 +233,7 @@ As you can see, you must add the default `9000` port, but you can use the port y
 If you want to run only one subproject separately, you have to get into the subproject and run:
 
     [play-multidomain-seed] $ project admin
-	[play-multidomain-seed-admin] $ run
+	[admin] $ run
 
 
 ### Test
@@ -247,7 +247,7 @@ To run the tests for every subproject at once, simply execute:
 And for a unique subproject, get into it and test it:
 
     [play-multidomain-seed] $ project admin
-	[play-multidomain-seed-admin] $ test
+	[admin] $ test
 
 ### Production
 
@@ -261,12 +261,12 @@ or
 
 Now you have a zip file for each module.
 
-    /play-multidomain-seed/modules/web/target/universal/play-multidomain-seed-web-1.0-SNAPSHOT.zip
-    /play-multidomain-seed/modules/admin/target/universal/play-multidomain-seed-admin-1.0-SNAPSHOT.zip
+    /play-multidomain-seed/modules/web/target/universal/web-1.0-SNAPSHOT.zip
+    /play-multidomain-seed/modules/admin/target/universal/admin-1.0-SNAPSHOT.zip
 
 So you can extract wherever you want and execute them separately. For example with:
 
-    ./play-multidomain-seed-admin-1.0-SNAPSHOT/bin/play-multidomain-seed-admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &
+    ./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &
 
 Note it is added the `&` at the end to run the app in the background. The PID will be stored in `RUNNING_PID` file, so when you want to stop the app, just execute:
 

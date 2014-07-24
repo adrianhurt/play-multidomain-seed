@@ -9,7 +9,6 @@ import com.typesafe.sbt.gzip.Import.gzip
 
 object Common {
 	def appName = "play-multidomain-seed"
-	def moduleName (module: String) = appName + "-" + module	
 	
 	// Common settings for every project
 	def settings (theName: String) = Seq(
@@ -23,7 +22,7 @@ object Common {
 	// Settings for the app, i.e. the root project
 	val appSettings = settings(appName)
 	// Settings for every module, i.e. for every subproject
-	def moduleSettings (module: String) = settings(moduleName(module)) ++: Seq(
+	def moduleSettings (module: String) = settings(module) ++: Seq(
 		includeFilter in (Assets, LessKeys.less) := "*.less",
 		excludeFilter in (Assets, LessKeys.less) := "_*.less",
 		pipelineStages := Seq(rjs, digest, gzip),

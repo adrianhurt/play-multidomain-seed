@@ -445,7 +445,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 			</p>
 
 <pre>[play-multidomain-seed] $ project admin
-[play-multidomain-seed-admin] $ run</pre>
+[admin] $ run</pre>
 		</div>
 		<div>
 			<h2>Test</h2>
@@ -462,7 +462,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 			<p>And for a unique subproject, get into it and test it:</p>
 			
 <pre>[play-multidomain-seed] $ project admin
-[play-multidomain-seed-admin] $ test</pre>
+[admin] $ test</pre>
 
 		</div>
 		<div>
@@ -478,12 +478,12 @@ RjsKeys.mainModule := s"main-$module"</pre>
 
 			<p>Now you have a zip file for each module.</p>
 				
-<pre>/play-multidomain-seed/modules/web/target/universal/play-multidomain-seed-web-1.0-SNAPSHOT.zip
-/play-multidomain-seed/modules/admin/target/universal/play-multidomain-seed-admin-1.0-SNAPSHOT.zip</pre>
+<pre>/play-multidomain-seed/modules/web/target/universal/web-1.0-SNAPSHOT.zip
+/play-multidomain-seed/modules/admin/target/universal/admin-1.0-SNAPSHOT.zip</pre>
 
 			<p>So you can extract wherever you want and execute them separately. For example with:</p>
 
-<pre>./play-multidomain-seed-admin-1.0-SNAPSHOT/bin/play-multidomain-seed-admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
+<pre>./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
 
 			<p>
 				Note it is added the <code>&</code> at the end to run the app in the background.
