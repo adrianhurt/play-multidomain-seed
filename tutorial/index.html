@@ -494,6 +494,13 @@ RjsKeys.mainModule := s"main-$module"</pre>
 <pre>kill $(cat path/to/RUNNING_PID)</pre>
 
 			<p>
+				If you would like to test the whole project in production mode, you should be able
+				to execute the start command as:
+			</p>
+			
+<pre>[play-multidomain-seed] $ start -Dconfig.resource=shared.prod.conf</pre>
+
+			<p>
 				Please, check the documentation about
 				<a href="http://www.playframework.com/documentation/2.3.x/ProductionConfiguration" target="_blank">Production Configuration</a>
 				for more parameters. And also check about

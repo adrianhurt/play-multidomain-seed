@@ -272,6 +272,10 @@ Note it is added the `&` at the end to run the app in the background. The PID wi
 
     kill $(cat path/to/RUNNING_PID)
 
+If you would like to test the whole project in production mode, you should be able to execute the start command as:
+
+    [play-multidomain-seed] $ start -Dconfig.resource=shared.prod.conf
+
 Please, check the documentation about [Production Configuration](http://www.playframework.com/documentation/2.3.x/ProductionConfiguration) for more parameters. And also check about [Application Secret](http://www.playframework.com/documentation/2.3.x/ApplicationSecret).
 
 ### Thanks to
