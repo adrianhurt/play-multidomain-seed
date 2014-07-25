@@ -199,7 +199,19 @@ To configure all of these features, for each service (`web` and `admin`) we have
 
 The first line declares the asset pipeline. The second one establishes the corresponding _RequireJS_ main config file to each module.
 
+It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the plugins.sbt file:
+
+    addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")
+
 Then you can put the common RequireJS modules in the subproject `common`, within the folder `modules/common/app/assets/javascripts/common/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`. Take care with possible namespace problems while running the whole project. In the example, the subproject _admin_ has other _RJS module_ within subfolder _admin_.
+
+The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must indicate the corresponding _RequireJS path_ to the common lib in the _RJS config file_ as:
+
+    require.config {
+      paths: {
+        common: "../lib/common/javascripts/common"
+      }
+    }
 
 Now we just simply need to declare the RequireJS as:
 

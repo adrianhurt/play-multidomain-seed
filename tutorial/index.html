@@ -379,6 +379,10 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				The first line declares the asset pipeline. The second one establishes the corresponding
 				<em>RequireJS</em> main config file to each module.
 			</p>
+			
+			<p>It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the plugins.sbt file:</p>
+			
+<pre>addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")</pre>
 
 			<p>
 				Then you can put the common RequireJS modules in the subproject
@@ -390,6 +394,18 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				In the example, the subproject <em>admin</em> has other <em>RJS module</em> within subfolder
 				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">admin</a>.
 			</p>
+			
+			<p>
+				The common Assets are packaged as Webjars for the other subprojects that depend on it,
+				so you must indicate the corresponding <em>RequireJS path</em> to the common lib in the
+				<a href="#code/modules/admin/app/assets/javascripts/main-admin.coffee" class="shortcut">RJS config file</a> as:
+			</p>
+			
+<pre>require.config {
+  paths: {
+    common: "../lib/common/javascripts/common"
+  }
+}</pre>
 
 			<p>Now we just simply need to declare the RequireJS as:</p>
 
