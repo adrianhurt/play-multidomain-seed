@@ -299,7 +299,10 @@
 			</p>
 
 			<p>
-				The specific code for each subproject will be added within its corresponding folder
+				The common CoffeeScript files are in the subproject
+				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
+				<a href="#code/modules/common/app/assets/javascripts/" class="shortcut">modules/common/app/assets/javascripts</a>.
+				And the specific code for each subproject will be added within its corresponding folder
 				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
 				Take care with possible namespace problems while running the whole project,
 				so it's better to put any file within a subfolder.
@@ -335,13 +338,20 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 			<p>
 				The common LESS files are in the subproject
 				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
-				<a href="#code/modules/common/app/assets/stylesheets/common" class="shortcut">modules/common/app/assets/stylesheets/common/</a>.
+				<a href="#code/modules/common/app/assets/stylesheets" class="shortcut">modules/common/app/assets/stylesheets/</a>.
 				And the specific code for each subproject will be added within its corresponding folder
-				<code>modules/[subproject]/app/assets/stylesheets/[subproject]/</code>.
+				<a href="#code/modules/admin/app/assets/stylesheets/admin" class="shortcut">modules/[subproject]/app/assets/stylesheets/[subproject]/</a>.
 				You could add the files directly in the folder
 				<a href="#code/modules/admin/app/assets/stylesheets" class="shortcut">modules/[subproject]/app/assets/stylesheets/</a>
 				but you should be careful with namespace collisions.
 			</p>
+			
+			<p>
+				To import a common LESS file, import it directly as (you can check an example in
+				<a href="#code/modules/admin/app/assets/stylesheets/admin/_variables.less" class="shortcut">modules/admin/app/assets/stylesheets/admin/_variables.less</a>):
+			</p>
+			
+<pre>@import "../../../../../common/app/assets/stylesheets/_common.less";</pre>
 
 			<p>To access to the compiled file you simply have to reference to its CSS equivalent:</p>
 
@@ -350,18 +360,6 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 			<p>
 				For more information, go to the documentation page about
 				<a href="http://www.playframework.com/documentation/2.3.x/AssetsLess" target="_blank">LESS</a>.
-			</p>
-		</div>
-		<div>
-			<h2>Public files</h2>
-			
-			<p>
-				You can put the common public files in the subproject
-				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
-				<a href="#code/modules/common/public" class="shortcut">modules/common/public/</a>.
-				And the specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/public" class="shortcut">modules/[subproject]/public/</a>.
-				Take care with possible namespace problems while running the whole project.
 			</p>
 		</div>
 		<div>
@@ -380,7 +378,10 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				<em>RequireJS</em> main config file to each module.
 			</p>
 			
-			<p>It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the plugins.sbt file:</p>
+			<p>
+				It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the
+				<a href="#code/project/plugins.sbt" class="shortcut">plugins.sbt</a> file:
+			</p>
 			
 <pre>addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")</pre>
 
@@ -403,7 +404,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 			
 <pre>require.config {
   paths: {
-    common: "../lib/common/javascripts/common"
+    common: "../lib/common/javascripts"
   }
 }</pre>
 
@@ -416,6 +417,24 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				<a href="http://www.playframework.com/documentation/2.3.x/Assets" target="_blank">Assets</a>,
 				the tutorial <code>play-2.3-highlights</code> in Activator UI, or the website of
 				<a href="http://requirejs.org" target="_blank">RequireJS</a>.
+			</p>
+			
+			<h3>Public files</h3>
+			
+			<p>
+				You can put the common public files in the subproject
+				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
+				<a href="#code/modules/common/public" class="shortcut">modules/common/public/</a>.
+				The common Assets are packaged as Webjars for the other subprojects that depend on it,
+				so you must access to them through their correspoding lib folder:
+			</p>
+			
+			<pre>&lt;img src="@routes.Assets.versioned("lib/common/images/normal-mini.png")"&gt;&lt;/img&gt;</pre>
+			
+			<p>	
+				And the specific code for each subproject will be added within its corresponding folder
+				<a href="#code/modules/admin/public" class="shortcut">modules/[subproject]/public/</a>.
+				Take care with possible namespace problems while running the whole project.
 			</p>
 		</div>
 		<div>

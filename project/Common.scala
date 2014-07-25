@@ -23,11 +23,14 @@ object Common {
 	val appSettings = settings(appName)
 	// Settings for every module, i.e. for every subproject
 	def moduleSettings (module: String) = settings(module) ++: Seq(
+		javaOptions in Test += s"-Dconfig.resource=application.conf"
+	)
+	// Settings for every service, i.e. for admin and web subprojects
+	def serviceSettings (module: String) = moduleSettings(module) ++: Seq(
 		includeFilter in (Assets, LessKeys.less) := "*.less",
 		excludeFilter in (Assets, LessKeys.less) := "_*.less",
 		pipelineStages := Seq(rjs, digest, gzip),
-		RjsKeys.mainModule := s"main-$module",
-		javaOptions in Test += s"-Dconfig.resource=application.conf"
+		RjsKeys.mainModule := s"main-$module"
 	)
 	
 	val commonDependencies = Seq(

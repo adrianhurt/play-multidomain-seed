@@ -1,4 +1,4 @@
-Common.moduleSettings("admin")
+Common.serviceSettings("admin")
 
 // Add here the specific settings for this module
 

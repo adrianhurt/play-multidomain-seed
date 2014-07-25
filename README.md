@@ -77,6 +77,8 @@ play-multidomain-seed
        └ prod.conf
        └ admin.routes
      └ public
+       └ images
+         └ admin
      └ test
    └ web
      └ ...
@@ -161,7 +163,7 @@ If you have doubts about the specific route of any webjar resource, remember it 
 
 The corresponding plugin needs to be active in file `project/plugins.sbt`.
 
-The specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`.  Take care with possible namespace problems while running the whole project, so it's better to put any file within a subfolder.
+The common CoffeeScript files are in the subproject `common`, within the folder `modules/common/app/assets/javascripts`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`.  Take care with possible namespace problems while running the whole project, so it's better to put any file within a subfolder.
 
 To access to the compiled file you simply have to reference to its JS equivalent:
 
@@ -178,17 +180,17 @@ The corresponding plugin needs to be active in file `project/plugins.sbt`. And t
 
 With that, every LESS file not prepended by an underscore (`_`) will be compiled, and they could import the code from the LESS files prepended by an underscore.
 
-The common LESS files are in the subproject `common`, within the folder `modules/common/app/assets/stylesheets/common/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/stylesheets/[subproject]/`. You could add the files directly in the folder `modules/[subproject]/app/assets/stylesheets/` but you should be careful with namespace collisions.
+The common LESS files are in the subproject `common`, within the folder `modules/common/app/assets/stylesheets/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/stylesheets/[subproject]/`. You could add the files directly in the folder `modules/[subproject]/app/assets/stylesheets/` but you should be careful with namespace collisions.
+
+To import a common LESS file, import it directly as (you can check an example in `modules/admin/app/assets/stylesheets/admin/_variables.less`):
+
+    @import "../../../../../common/app/assets/stylesheets/_common.less";
 
 To access to the compiled file you simply have to reference to its CSS equivalent:
 
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/web/main.css")">
 
 For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.3.x/AssetsLess).
-
-### Public files
-
-You can put the common public files in the subproject `common`, within the folder `modules/common/public/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/public/`. Take care with possible namespace problems while running the whole project.
 
 ### Assets: RequireJS, Digest, Etag, Gzip, Fingerprint
 
@@ -199,7 +201,7 @@ To configure all of these features, for each service (`web` and `admin`) we have
 
 The first line declares the asset pipeline. The second one establishes the corresponding _RequireJS_ main config file to each module.
 
-It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the plugins.sbt file:
+It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the `plugins.sbt` file:
 
     addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")
 
@@ -209,7 +211,7 @@ The common Assets are packaged as Webjars for the other subprojects that depend 
 
     require.config {
       paths: {
-        common: "../lib/common/javascripts/common"
+        common: "../lib/common/javascripts"
       }
     }
 
@@ -218,6 +220,14 @@ Now we just simply need to declare the RequireJS as:
     <script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"></script>
 
 For more information, go to the documentation page about [Assets](http://www.playframework.com/documentation/2.3.x/Assets), the tutorial `play-2.3-highlights` in Activator UI, or the website of [RequireJS](http://requirejs.org).
+
+#### Public files
+
+You can put the common public files in the subproject `common`, within the folder `modules/common/public/`. The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must access to them through their correspoding lib folder:
+
+    <img src="@routes.Assets.versioned("lib/common/images/normal-mini.png")"></img>
+
+And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/public/`. Take care with possible namespace problems while running the whole project.
 
 ### Development
 
