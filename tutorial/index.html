@@ -377,13 +377,6 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				The first line declares the asset pipeline. The second one establishes the corresponding
 				<em>RequireJS</em> main config file to each module.
 			</p>
-			
-			<p>
-				It is also necessary to add the sbt-web stamped snapshot version 1.1.0-20140724-7376faf at the
-				<a href="#code/project/plugins.sbt" class="shortcut">plugins.sbt</a> file:
-			</p>
-			
-<pre>addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.0-20140724-7376faf")</pre>
 
 			<p>
 				Then you can put the common RequireJS modules in the subproject
@@ -533,7 +526,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 				to execute the start command as:
 			</p>
 			
-<pre>[play-multidomain-seed] $ start -Dconfig.resource=shared.prod.conf</pre>
+<pre>[play-multidomain-seed] $ start</pre>
 
 			<p>
 				Please, check the documentation about
