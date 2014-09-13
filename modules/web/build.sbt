@@ -4,7 +4,7 @@ Common.serviceSettings("web")
 
 
 libraryDependencies ++= Common.commonDependencies ++: Seq(
-	"org.webjars" % "bootswatch-amelia" % "3.2.0-1"
+	"org.webjars" % "bootswatch-cerulean" % "3.2.0-1"
 	// Add here the specific dependencies for this module:
 	// jdbc,
 	// anorm

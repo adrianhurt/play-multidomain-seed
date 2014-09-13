@@ -148,12 +148,12 @@ The common [Webjars](http://www.webjars.org) are included within the field `Comm
 And the specific webjars for a subproject are declared in the file `modules/[subproject]/build.sbt`. For example, for the `web` subproject:
 
     libraryDependencies ++= Common.commonDependencies ++: Seq(
-        "org.webjars" % "bootswatch-amelia" % "3.2.0-1"
+        "org.webjars" % "bootswatch-cerulean" % "3.2.0-1"
     )
 
 Then, to access to their resources simply remember they are inside `lib` folder. For the previous examples:
 
-    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootswatch-amelia/css/bootstrap.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootswatch-cerulean/css/bootstrap.min.css")">
     <script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")"></script>
     <script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.min.js")"></script>
 
