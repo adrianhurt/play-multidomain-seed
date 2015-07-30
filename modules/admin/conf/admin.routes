@@ -8,7 +8,15 @@ GET     /							controllers.admin.Application.index
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.admin.Assets.versioned(path="/public", file: Asset)
+GET     /public/*file					controllers.admin.Assets.public(path="/public", file: Asset)
+GET     /lib/*file						controllers.admin.Assets.lib(path="/public/lib", file: Asset)
+GET     /css/*file						controllers.admin.Assets.css(path="/public/stylesheets", file: Asset)
+GET     /js/*file							controllers.admin.Assets.js(path="/public/javascripts", file: Asset)
+GET     /img/*file						controllers.admin.Assets.img(path="/public/images", file: Asset)
+GET     /common/css/*file			controllers.admin.Assets.commonCss(path="/public/lib/common/stylesheets", file: Asset)
+GET     /common/js/*file			controllers.admin.Assets.commonJs(path="/public/lib/common/javascripts", file: Asset)
+GET     /common/img/*file			controllers.admin.Assets.commonImg(path="/public/lib/common/images", file: Asset)
 
+GET     /rsc/*file						controllers.admin.SharedResources.rsc(file: String)
 
 ->  / common.Routes

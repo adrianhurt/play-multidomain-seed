@@ -24,9 +24,10 @@
 @views.html.web.main(title = message, modals = theModals) {
 	
 	<div class="pull-right">
-		<img src="@routes.Assets.versioned("lib/common/images/normal-mini.png")" style="margin-top: 10px; margin-bottom: 20px"></img>
-		<p>Conf file: @play.api.Play.current.configuration.getString("this.file")</p>
+		<img src="@routes.Assets.commonImg("play.svg")" width="250" style="margin-top: 10px; margin-bottom: 20px"></img>
+		<p class="text-right">Conf file: @play.api.Play.current.configuration.getString("this.file")</p>
 	</div>
+	<img class="pull-right" src="@routes.SharedResources.rsc("example.png")" style="margin: 10px 30px 0 0"></img>
 	
 	<h1>WEB template</h1>
 	<h3>@message <a href="@routes.Application.index">reload</a></h3>

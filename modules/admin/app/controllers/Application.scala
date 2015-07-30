@@ -1,14 +1,14 @@
 package controllers.admin
 
-import models._
+import models.admin._
 import play.api._
 import play.api.mvc._
 import play.api.Play.current
 
-object Application extends Controller {
+class Application extends Controller {
 
 	def index = Action { implicit request =>
-		val computers = Computer.list
+		val computers = ComputerAdmin.list
 		Ok(views.html.admin.index("Hello! I'm the ADMIN!", computers))
 	}
 

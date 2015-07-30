@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>
-			Multidomain Seed for Play Framework 2.3
+			Multidomain Seed for Play Framework 2.4
 		</title>
 	</head>
 	<body>
@@ -43,7 +43,7 @@
 					<ul>
 						<li><a href="http://www.webjars.org" target="_blank">Webjars</a>.</li>
 						<li><a href="http://coffeescript.org" target="_blank">CoffeeScript</a> and <a href="http://lesscss.org" target="_blank">LESS</a> Assets.</li>
-						<li><a href="http://www.playframework.com/documentation/2.3.x/Assets" target="_blank">Assets with RequireJS, Digest, Etag, Gzip, Fingerprint</a>.</li>
+						<li><a href="http://www.playframework.com/documentation/2.4.x/Assets" target="_blank">Assets with RequireJS, Digest, Etag, Gzip, Fingerprint</a>.</li>
 					</ul>
 				</li>
 				<li>It shoud explain:
@@ -97,7 +97,7 @@
 					configures root project and declares every subproject.
 				</li>
 				<li>
-					<a href="#code/conf/application.conf" class="shortcut">conf/application.conf</a> <em>(used when whole project is running)</em>:
+					<a href="#code/conf/root-dev.conf" class="shortcut">conf/root-dev.conf</a> <em>(used when whole project is running)</em>:
 					the default one. In the next section it is explained in detail.
 				</li>
 				<li>
@@ -105,8 +105,8 @@
 					routes file for the whole project. It simply imports the routes file of every subproject.
 				</li>
 				<li>
-					<a href="#code/app/Global.scala" class="shortcut">app/Global.scala</a> <em>(used when whole project is running)</em>:
-					the GlobalSettings object for the whole project. It determines the subdomain for each
+					<a href="#code/app/RequestHandler.scala" class="shortcut">app/RequestHandler.scala</a> <em>(used when whole project is running)</em>:
+					the RequestHandler object for the whole project. It determines the subdomain for each
 					request (admin or web) and delegates its behaviour to the corresponding subproject.
 				</li>
 			</ul>
@@ -117,18 +117,24 @@
 				<li>
 					<a href="#code/modules/admin/build.sbt" class="shortcut">modules/[subproject]/build.sbt</a>:
 					configures the [subproject].
+				</li>
 				<li>
-					<a href="#code/modules/admin/conf/application.conf" class="shortcut">modules/[subproject]/conf/application.conf</a>
-					<em>(used when only this subproject is running)</em>: the default one, it declares the routes file and
-					GlobalSettings object for the subproject while running, testing or distributing only this subproject.
+					<a href="#code/modules/admin/conf/admin-dev.conf" class="shortcut">modules/[subproject]/conf/[subproject]-dev.conf</a>
+					<em>(used when only this subproject is running)</em>: the default one, it declares the routes file for the subproject
+					while running or testing only this subproject.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/admin-prod.conf" class="shortcut">modules/[subproject]/conf/[subproject]-prod.conf</a>
+					<em>(used when only this subproject is running)</em>: it declares the routes file for the subproject
+					while distributing only this subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/conf/admin.routes" class="shortcut">modules/[subproject]/conf/[subproject].routes</a>
 					<em>(used when only this subproject is running)</em>: routes file for this subproject.
 				</li>
 				<li>
-					<a href="#code/modules/admin/app/GlobalAdmin.scala" class="shortcut">modules/[subproject]/app/Global[Subproject].scala</a>
-					<em>(used when only this subproject is running)</em>: the GlobalSettings object for this subproject.
+					<a href="#code/modules/admin/app/ErrorHandler.scala" class="shortcut">modules/[subproject]/app/ErrorHandler.scala</a>
+					<em>(used when only this subproject is running)</em>: the ErrorHandler object for this subproject.
 				</li>
 			</ul>
 
@@ -145,34 +151,28 @@
 
 			<ul>
 				<li>
-					<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>:
-					folder for CoffeeScript files of this subproject. Take care with the last folder for
-					avoid namespace problems while running the whole project.
+					<a href="#code/modules/admin/app/assets/javascripts" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>:
+					folder for CoffeeScript files of this subproject.
 				</li>
 				<li>
-					<a href="#code/modules/admin/app/assets/stylesheets/admin" class="shortcut">modules/[subproject]/app/assets/stylesheets/[subproject]/</a>:
-					folder for LESS files of this subproject. Take care with the last folder for avoid
-					namespace problems while running the whole project.
+					<a href="#code/modules/admin/app/assets/stylesheets" class="shortcut">modules/[subproject]/app/assets/stylesheets/</a>:
+					folder for LESS files of this subproject.
 				</li>
 				<li>
-					<a href="#code/modules/admin/app/controllers/admin" class="shortcut">modules/[subproject]/app/controllers/[subproject]/</a>:
-					folder for the controllers of this subproject. Take care with the last folder for avoid
-					namespace problems while running the whole project.
+					<a href="#code/modules/admin/app/controllers" class="shortcut">modules/[subproject]/app/controllers/</a>:
+					folder for the controllers of this subproject.
 				</li>
 				<li>
-					<a href="#code/modules/admin/app/controllers/admin/Assets.scala" class="shortcut">modules/[subproject]/app/controllers/[subproject]/Assets.scala</a>:
-					it is necessary to implement an <code>object Assets extends controllers.AssetsBuilder</code>
-					for every subproject.
+					<a href="#code/modules/admin/app/controllers/Assets.scala" class="shortcut">modules/[subproject]/app/controllers/Assets.scala</a>:
+					it is necessary to implement an <code>object Assets extends controllers.AssetsBuilder</code> for every subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/app/views/admin" class="shortcut">modules/[subproject]/app/views/[subproject]/</a>:
-					folder for the views of this subproject. Take care with the last folder for avoid
-					namespace problems while running the whole project.
+					folder for the views of this subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/public" class="shortcut">modules/[subproject]/public/</a>:
-					folder for every public file of this subproject. Take care with possible namespace
-					problems while running the whole project.
+					folder for every public file of this subproject.
 				</li>
 				<li>
 					<a href="#code/modules/admin/test" class="shortcut">modules/[subproject]/test/</a>:
@@ -182,7 +182,7 @@
 
 			<p>
 				Please check the <em>Splitting the route file</em> section within the documentation page about
-				<a href="http://www.playframework.com/documentation/2.3.x/SBTSubProjects" target="_blank">SBT Sub-projects</a>.
+				<a href="http://www.playframework.com/documentation/2.4.x/SBTSubProjects" target="_blank">SBT Sub-projects</a>.
 			</p>
 		</div>
 		<div>
@@ -195,7 +195,7 @@
 			
 			<ul>
 				<li>
-					<a href="#code/conf/application.conf" class="shortcut">conf/application.conf</a>:
+					<a href="#code/conf/root-dev.conf" class="shortcut">conf/root-dev.conf</a>:
 					the configuration file that is called by default when the whole project is running.
 					It simply includes the <em>shared.dev.conf</em> file.
 				</li>
@@ -213,17 +213,17 @@
 			
 			<ul>
 				<li>
-					<a href="#code/modules/admin/conf/application.conf" class="shortcut">modules/[subproject]/conf/application.conf</a>:
+					<a href="#code/modules/admin/conf/admin.conf" class="shortcut">modules/[subproject]/conf/[subproject].conf</a>:
+					declares the specific configuration for this subproject for development or production.
+					It must declare the route file for this subproject.
+				</li>
+				<li>
+					<a href="#code/modules/admin/conf/admin-dev.conf" class="shortcut">modules/[subproject]/conf/[subproject]-dev.conf</a>:
 					the configuration file that is called by default when the [subproject] is running.
 					It simply includes the <em>shared.dev.conf</em> and <em>[subproject].conf</em> files.
 				</li>
 				<li>
-					<a href="#code/modules/admin/conf/admin.conf" class="shortcut">modules/[subproject]/conf/[subproject].conf</a>:
-					declares the specific configuration for this subproject for development or production.
-					It must declare the Global object and route file for this subproject.
-				</li>
-				<li>
-					<a href="#code/modules/admin/conf/prod.conf" class="shortcut">modules/[subproject]/conf/prod.conf</a>:
+					<a href="#code/modules/admin/conf/admin-prod.conf" class="shortcut">modules/[subproject]/conf/[subproject]-prod.conf</a>:
 					declares the specific configuration for this subproject for production. It includes the
 					<em>shared.prod.conf</em> and <em>[subproject].conf</em> files.
 				</li>
@@ -244,24 +244,160 @@
 			</p>
 			
 			<p>
+				The corresponding configuration file is correctly taken for each case thanks to the settings lines in
+				<a href="#code/project/Common.scala" class="shortcut">Common.scala</a>:
+			</p>
+			
+<pre>javaOptions += s"-Dconfig.resource=$module-dev.conf"</pre>
+			
+			<p>
 				<em>Tip:</em> as files <em>shared.dev.conf</em> and <em>shared.prod.conf</em> for every subproject are
 				the same as the general ones, you can use <em>aliases</em> or <em>symbolic links</em> for them in order to
 				avoid to maintain all of them.
 			</p>
 		</div>
 		<div>
-			<h2>Webjars</h2>
+			<h2>Assets: RequireJS, Digest, Etag, Gzip, Fingerprint</h2>
+	
+			<p>
+				To configure all of these features, for each service (<code>web</code> and <code>admin</code>)
+				we have the <a href="#code/project/Common.scala" class="shortcut">following</a>:
+			</p>
+
+<pre>pipelineStages := Seq(rjs, digest, gzip)
+RjsKeys.mainModule := s"main-$module"</pre>
+
+			<p>
+				The first line declares the asset pipeline. The second one establishes the corresponding
+				<em>RequireJS</em> main config file to each module.
+			</p>
+
+			<p>
+				Then you can put the common RequireJS modules in the subproject
+				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
+				<a href="#code/modules/common/app/assets/javascripts/common" class="shortcut">modules/common/app/assets/javascripts/common/</a>.
+				And the specific code for each subproject will be added within its corresponding folder
+				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
+				Take care with possible namespace problems while running the whole project.
+				In the example, the subproject <em>admin</em> has other <em>RJS module</em> within subfolder
+				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">admin</a>.
+			</p>
+	
+			<p>
+				The common Assets are packaged as Webjars for the other subprojects that depend on it,
+				so you must indicate the corresponding <em>RequireJS path</em> to the common lib in the
+				<a href="#code/modules/admin/app/assets/javascripts/main-admin.coffee" class="shortcut">RJS config file</a> as:
+			</p>
+	
+<pre>require.config
+  paths:
+    common: "../lib/common/javascripts"
+    jquery: "../lib/jquery/jquery"
+    ...</pre>
+
+			<p>Now we just simply need to declare the RequireJS as:</p>
+
+<pre>&lt;script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"&gt;&lt;/script&gt;</pre>
+	
+			<p>
+				For more information, go to the documentation page about
+				<a href="http://www.playframework.com/documentation/2.4.x/Assets" target="_blank">Assets</a>,
+				the tutorial <code>play-2.3-highlights</code> in Activator UI, or the website of
+				<a href="http://requirejs.org" target="_blank">RequireJS</a>.
+			</p>
 			
+			<h3>Custom AssetsBuilder</h3>
+			
+			<p>In order to avoid code like this:</p>
+			
+<pre>href="@routes.Assets.versioned("images/favicon.png")"
+href="@routes.Assets.versioned("stylesheets/main.css")">
+data-main="@routes.Assets.versioned("javascripts/main-web.js")"
+src="@routes.Assets.versioned("lib/requirejs/require.js")"
+src="@routes.Assets.versioned("lib/common/images/logo.png")"</pre>
+
+			<p>because it can be very tedious to remember the specific path for every resource depending of its type or if it's from the common subproject or not, I prefer using this syntax:</p>
+			
+<pre>href="@routes.Assets.img("favicon.png")"
+href="@routes.Assets.css("main.css")">
+data-main="@routes.Assets.js("main-web.js")"
+src="@routes.Assets.lib("requirejs/require.js")"
+src="@routes.Assets.commonImg("logo.png")"</pre>
+
+			<p>To get that we only need to define a custom <code>AssetsBuilder</code> class. You can see it in <a href="#code/modules/common/app/controllers/Assets.scala" class="shortcut">modules/common/app/controllers/Assets.scala</a>.</p>
+			
+			<p>Add a simple <code>Assets</code> class within the <code>controllers</code> folder of each subproject, as you can see for <a href="#code/modules/web/app/controllers/Assets.scala" class="shortcut">modules/web/app/controllers/Assets.scala</a>.</p>
+
+			<p>And add the following in the routes files (check it <a href="#code/modules/web/conf/web.routes" class="shortcut">here</a>):</p>
+			
+<pre>GET     /public/*file					controllers.web.Assets.public(path="/public", file: Asset)
+GET     /lib/*file						controllers.web.Assets.lib(path="/public/lib", file: Asset)
+GET     /css/*file						controllers.web.Assets.css(path="/public/stylesheets", file: Asset)
+GET     /js/*file							controllers.web.Assets.js(path="/public/javascripts", file: Asset)
+GET     /img/*file						controllers.web.Assets.img(path="/public/images", file: Asset)
+GET     /common/css/*file			controllers.web.Assets.commonCss(path="/public/lib/common/stylesheets", file: Asset)
+GET     /common/js/*file			controllers.web.Assets.commonJs(path="/public/lib/common/javascripts", file: Asset)
+GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/common/images", file: Asset)</pre>
+	
+			<h3>Public files</h3>
+	
+			<p>
+				You can put the common public files in the subproject
+				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
+				<a href="#code/modules/common/public" class="shortcut">modules/common/public/</a>.
+				The common Assets are packaged as Webjars for the other subprojects that depend on it,
+				so you must access to them through their correspoding lib folder:
+			</p>
+	
+			<pre>&lt;img src="@routes.Assets.commonImg("play.svg")"&gt;&lt;/img&gt;</pre>
+	
+			<p>	
+				And the specific code for each subproject will be added within its corresponding folder
+				<a href="#code/modules/admin/public" class="shortcut">modules/[subproject]/public/</a>.
+			</p>
+			
+			<h3>Shared resources</h3>
+			
+			<p>If you have shared resources between your subprojects, like for example uploaded images from your users, you need to render or download them from a shared folder. Note you can't consider a shared resource like a asset.</p>
+			
+			<p>The process is very similar than the custom <code>AssetsBuilder</code>. You can see it in <a href="#code/modules/common/app/controllers/Assets.scala" class="shortcut">modules/common/app/controllers/Assets.scala</a>.</p>
+			
+			<p>Add a simple <code>SharedResources</code> class within the <code>controllers</code> folder of each subproject, as you can see for <a href="#code/modules/web/app/controllers/Assets.scala" class="shortcut">modules/web/app/controllers/Assets.scala</a>.</p>
+
+			<p>And add the following in the routes files (check it <a href="#code/modules/web/conf/web.routes" class="shortcut">here</a>):</p>
+			
+<pre>GET     /rsc/*file         controllers.web.SharedResources.rsc(file: String)</pre>
+		</div>
+		<div>
+			<h2>RequestHandler</h2>
+			
+			<p>We need a global RequestHandler to run the whole project and get to things:</p>
+			
+			<ul>
+				<li>
+					Determine the subdomain for each request (<code>admin</code> or <code>web</code>) and delegate its behaviour to the corresponding subproject.
+				</li>
+				<li>
+					Rewrite the urls for the <code>css</code>, <code>js</code> and <code>img</code> assets for the corresponding subproject.
+					This is because for the root project these resources are located at <code>public/lib/[subproject]/</code>.
+				</li>
+			</ul>
+			
+			<p>These things are done overriding the <code>routeRequest</code> method of the <a href="#code/app/RequestHandler.scala" class="shortcut">RequestHandler</a>.</p>
+		</div>
+		<div>
+			<h2>Webjars</h2>
+	
 			<p>
 				The common <a href="http://www.webjars.org" target="_blank">Webjars</a> are included within
 				the field <code>Common.commonDependencies</code> in the file
 				<a href="#code/project/Common.scala" class="shortcut">project/Common.scala</a>. In our case:</p>
-			
+	
 <pre>val commonDependencies = Seq(
   ...
-  "org.webjars" % "jquery" % "2.1.1",
-  "org.webjars" % "bootstrap" % "3.2.0"
-  "org.webjars" % "requirejs" % "2.1.14-1"
+  "org.webjars" % "jquery" % "2.1.4",
+  "org.webjars" % "bootstrap" % "3.3.5",
+  "org.webjars" % "requirejs" % "2.1.19"
   ...
 )</pre>
 
@@ -272,17 +408,17 @@
 			</p>
 
 <pre>libraryDependencies ++= Common.commonDependencies ++: Seq(
-  "org.webjars" % "bootswatch-cerulean" % "3.2.0-1"
+  "org.webjars" % "bootswatch-cerulean" % "3.3.4+1"
 )</pre>
 
 			<p>
 				Then, to access to their resources simply remember they are inside <code>lib</code> folder.
 				For the previous examples:
 			</p>
-			
-<pre>&lt;link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootswatch-cerulean/css/bootstrap.min.css")"&gt;
-&lt;script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")"&gt;&lt;/script&gt;
-&lt;script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.min.js")"&gt;&lt;/script&gt;</pre>
+	
+<pre>&lt;link rel="stylesheet" media="screen" href="@routes.Assets.lib("bootswatch-cerulean/css/bootstrap.min.css")"&gt;
+&lt;script src="@routes.Assets.lib("jquery/jquery.min.js")"&gt;&lt;/script&gt;
+&lt;script src="@routes.Assets.lib("bootstrap/js/bootstrap.min.js")"&gt;&lt;/script&gt;</pre>
 
 			<p>
 				If you have doubts about the specific route of any webjar resource, remember it is directly
@@ -304,17 +440,15 @@
 				<a href="#code/modules/common/app/assets/javascripts/" class="shortcut">modules/common/app/assets/javascripts</a>.
 				And the specific code for each subproject will be added within its corresponding folder
 				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
-				Take care with possible namespace problems while running the whole project,
-				so it's better to put any file within a subfolder.
 			</p>
 
 			<p>To access to the compiled file you simply have to reference to its JS equivalent:</p>
 
-<pre>&lt;script src="@routes.Assets.versioned("javascripts/web/main.js")"&gt;&lt;/script&gt;</pre>
+<pre>&lt;script src="@routes.Assets.js("main.js")"&gt;&lt;/script&gt;</pre>
 
 			<p>
 				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.3.x/AssetsCoffeeScript" target="_blank">CoffeeScript</a>.
+				<a href="http://www.playframework.com/documentation/2.4.x/AssetsCoffeeScript" target="_blank">CoffeeScript</a>.
 			</p>
 		</div>
 		<div>
@@ -340,94 +474,23 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
 				<a href="#code/modules/common/app/assets/stylesheets" class="shortcut">modules/common/app/assets/stylesheets/</a>.
 				And the specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/app/assets/stylesheets/admin" class="shortcut">modules/[subproject]/app/assets/stylesheets/[subproject]/</a>.
-				You could add the files directly in the folder
-				<a href="#code/modules/admin/app/assets/stylesheets" class="shortcut">modules/[subproject]/app/assets/stylesheets/</a>
-				but you should be careful with namespace collisions.
+				<a href="#code/modules/admin/app/assets/stylesheets" class="shortcut">modules/[subproject]/app/assets/stylesheets/</a>.
 			</p>
 			
 			<p>
 				To import a common LESS file, import it directly as (you can check an example in
-				<a href="#code/modules/admin/app/assets/stylesheets/admin/_variables.less" class="shortcut">modules/admin/app/assets/stylesheets/admin/_variables.less</a>):
+				<a href="#code/modules/admin/app/assets/stylesheets/_variables.less" class="shortcut">modules/admin/app/assets/stylesheets/_variables.less</a>):
 			</p>
 			
 <pre>@import "../../../../../common/app/assets/stylesheets/_common.less";</pre>
 
 			<p>To access to the compiled file you simply have to reference to its CSS equivalent:</p>
 
-<pre>&lt;link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/web/main.css")"&gt;</pre>
+<pre>&lt;link rel="stylesheet" media="screen" href="@routes.Assets.css("main.css")"&gt;</pre>
 
 			<p>
 				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.3.x/AssetsLess" target="_blank">LESS</a>.
-			</p>
-		</div>
-		<div>
-			<h2>Assets: RequireJS, Digest, Etag, Gzip, Fingerprint</h2>
-			
-			<p>
-				To configure all of these features, for each service (<code>web</code> and <code>admin</code>)
-				we have the <a href="#code/project/Common.scala" class="shortcut">following</a>:
-			</p>
-
-<pre>pipelineStages := Seq(rjs, digest, gzip)
-RjsKeys.mainModule := s"main-$module"</pre>
-
-			<p>
-				The first line declares the asset pipeline. The second one establishes the corresponding
-				<em>RequireJS</em> main config file to each module.
-			</p>
-
-			<p>
-				Then you can put the common RequireJS modules in the subproject
-				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
-				<a href="#code/modules/common/app/assets/javascripts/common" class="shortcut">modules/common/app/assets/javascripts/common/</a>.
-				And the specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/app/assets/javascripts/" class="shortcut">modules/[subproject]/app/assets/javascripts/</a>.
-				Take care with possible namespace problems while running the whole project.
-				In the example, the subproject <em>admin</em> has other <em>RJS module</em> within subfolder
-				<a href="#code/modules/admin/app/assets/javascripts/admin" class="shortcut">admin</a>.
-			</p>
-			
-			<p>
-				The common Assets are packaged as Webjars for the other subprojects that depend on it,
-				so you must indicate the corresponding <em>RequireJS path</em> to the common lib in the
-				<a href="#code/modules/admin/app/assets/javascripts/main-admin.coffee" class="shortcut">RJS config file</a> as:
-			</p>
-			
-<pre>require.config {
-  paths: {
-    common: "../lib/common/javascripts"
-  }
-}</pre>
-
-			<p>Now we just simply need to declare the RequireJS as:</p>
-
-<pre>&lt;script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"&gt;&lt;/script&gt;</pre>
-			
-			<p>
-				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.3.x/Assets" target="_blank">Assets</a>,
-				the tutorial <code>play-2.3-highlights</code> in Activator UI, or the website of
-				<a href="http://requirejs.org" target="_blank">RequireJS</a>.
-			</p>
-			
-			<h3>Public files</h3>
-			
-			<p>
-				You can put the common public files in the subproject
-				<a href="#code/modules/common" class="shortcut">common</a>, within the folder
-				<a href="#code/modules/common/public" class="shortcut">modules/common/public/</a>.
-				The common Assets are packaged as Webjars for the other subprojects that depend on it,
-				so you must access to them through their correspoding lib folder:
-			</p>
-			
-			<pre>&lt;img src="@routes.Assets.versioned("lib/common/images/normal-mini.png")"&gt;&lt;/img&gt;</pre>
-			
-			<p>	
-				And the specific code for each subproject will be added within its corresponding folder
-				<a href="#code/modules/admin/public" class="shortcut">modules/[subproject]/public/</a>.
-				Take care with possible namespace problems while running the whole project.
+				<a href="http://www.playframework.com/documentation/2.4.x/AssetsLess" target="_blank">LESS</a>.
 			</p>
 		</div>
 		<div>
@@ -454,7 +517,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 
 			<p>
 				And that's all! The whole project will run using the
-				<a href="#code/conf/application.conf" class="shortcut">conf/application.conf</a> file enabling
+				<a href="#code/conf/root-dev.conf" class="shortcut">conf/root-dev.conf</a> file enabling
 				all the services at once. You can go with your browser and check the URLs:
 			</p>
 
@@ -491,7 +554,6 @@ RjsKeys.mainModule := s"main-$module"</pre>
 			
 <pre>[play-multidomain-seed] $ project admin
 [admin] $ test</pre>
-
 		</div>
 		<div>
 			<h2>Production</h2>
@@ -511,7 +573,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 
 			<p>So you can extract wherever you want and execute them separately. For example with:</p>
 
-<pre>./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
+<pre>./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=admin-prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &</pre>
 
 			<p>
 				Note it is added the <code>&</code> at the end to run the app in the background.
@@ -530,9 +592,9 @@ RjsKeys.mainModule := s"main-$module"</pre>
 
 			<p>
 				Please, check the documentation about
-				<a href="http://www.playframework.com/documentation/2.3.x/ProductionConfiguration" target="_blank">Production Configuration</a>
+				<a href="http://www.playframework.com/documentation/2.4.x/ProductionConfiguration" target="_blank">Production Configuration</a>
 				for more parameters. And also check about
-				<a href="http://www.playframework.com/documentation/2.3.x/ApplicationSecret" target="_blank">Application Secret</a>.</p>	
+				<a href="http://www.playframework.com/documentation/2.4.x/ApplicationSecret" target="_blank">Application Secret</a>.</p>	
 		</div>
 	</body>
 </html>

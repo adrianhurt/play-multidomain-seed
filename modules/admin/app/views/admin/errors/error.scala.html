@@ -1,0 +1,8 @@
+@(request: RequestHeader, error: play.api.UsefulException)
+
+@views.html.admin.main("ADMIN Oops, an error occurred") {
+
+	<h1>ADMIN Oops, an error occurred</h1>
+	<p>This exception has been logged with id <strong>@error.id</strong>.</p>
+
+}

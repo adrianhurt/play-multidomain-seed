@@ -1,4 +1,4 @@
-## Multidomain Seed [Play 2.3 - Scala]
+## Multidomain Seed [Play 2.4 - Scala]
 
 __Note:__ All this information is also available as a tutorial if you run the app using [Activator UI](http://typesafe.com/platform/getstarted).
 
@@ -18,7 +18,7 @@ Then, we have the following objectives:
 * It should be a template ready to use with the following features:
   * [Webjars](http://www.webjars.org).
   * [CoffeeScript](http://coffeescript.org) and [LESS](http://lesscss.org) Assets.
-  * [Assets with RequireJS, Digest, Etag, Gzip, Fingerprint](http://www.playframework.com/documentation/2.3.x/Assets).
+  * [Assets with RequireJS, Digest, Etag, Gzip, Fingerprint](http://www.playframework.com/documentation/2.4.x/Assets).
 * It shoud explain:
   * How to share every common code to avoid duplications (models, controllers, views, CoffeeScript, LESS, ...).
   * How to use it for development, test and production.
@@ -39,9 +39,9 @@ This is the basic structure of the whole project:
 play-multidomain-seed
  └ build.sbt
  └ app
-   └ Global.scala
+   └ RequestHandler.scala
  └ conf
-   └ application.conf
+   └ root-dev.conf
    └ routes
  └ project
    └ build.properties
@@ -51,7 +51,7 @@ play-multidomain-seed
    └ admin
      └ build.sbt
      └ app
-	   └ GlobalAdmin.scala
+       └ ErrorHandler.scala
        └ assets
          └ javascripts
            └ main-admin.coffee
@@ -59,26 +59,22 @@ play-multidomain-seed
            └ admin
              └ otherLib.coffee
          └ stylesheets
-           └ admin
-             └ main.less
+           └ main.less
        └ controllers
-         └ admin
-           └ Application.scala
-           └ Assets.scala
+         └ Application.scala
+         └ Assets.scala
        └ models
-         └ admin
-           └ Models.scala
+         └ Models.scala
        └ views
 	       └ admin
              └ index.scala.html
              └ main.scala.html
      └ conf
-       └ application.conf
-       └ prod.conf
+       └ admin-dev.conf
+       └ admin-prod.conf
        └ admin.routes
      └ public
        └ images
-         └ admin
      └ test
    └ web
      └ ...
@@ -89,16 +85,17 @@ play-multidomain-seed
 Let's try to explain briefly how it is configured. For running the whole project we have the following configuration files:
 
 * `build.sbt`: configures root project and declares every subproject.
-* `conf/application.conf` _(used when whole project is running)_: the default one. In the next section it is explained in detail.
+* `conf/root-dev.conf` _(used when whole project is running)_: the default one. In the next section it is explained in detail.
 * `conf/routes` _(used when whole project is running)_: routes file for the whole project. It simply imports the routes file of every subproject.
-* `app/Global.scala` _(used when whole project is running)_: the GlobalSettings object for the whole project. It determines the subdomain for each request (admin or web) and delegates its behaviour to the corresponding subproject.
+* `app/RequestHandler.scala` _(used when whole project is running)_: the RequestHandler object for the whole project. It determines the subdomain for each request (admin or web) and delegates its behaviour to the corresponding subproject.
 
 And for running each subproject independently:
 
 * `modules/[subproject]/build.sbt`: configures the [subproject].
-* `modules/[subproject]/conf/application.conf` _(used when only this subproject is running)_: the default one, it declares the routes file and GlobalSettings object for the subproject while running, testing or distributing only this subproject.
+* `modules/[subproject]/conf/[subproject]-dev.conf` _(used when only this subproject is running)_: the default one, it declares the routes file for the subproject while running or testing only this subproject.
+* `modules/[subproject]/conf/[subproject]-prod.conf` _(used when only this subproject is running)_: it declares the routes file for the subproject while distributing only this subproject.
 * `modules/[subproject]/conf/[subproject].routes` _(used when only this subproject is running)_: routes file for this subproject.
-* `modules/[subproject]/app/Global[Subproject].scala` _(used when only this subproject is running)_: the GlobalSettings object for this subproject.
+* `modules/[subproject]/app/ErrorHandler.scala` _(used when only this subproject is running)_: the ErrorHandler object for this subproject.
 
 The common code for every  `build.sbt` file is defined at:
 
@@ -106,56 +103,173 @@ The common code for every  `build.sbt` file is defined at:
 
 And the rest of relevant folders and files are:
 
-* `modules/[subproject]/app/assets/javascripts/`: folder for CoffeeScript files of this subproject. Take care with the last folder for avoid namespace problems while running the whole project.
-* `modules/[subproject]/app/assets/stylesheets/[subproject]/`: folder for LESS files of this subproject. Take care with the last folder for avoid namespace problems while running the whole project.
-* `modules/[subproject]/app/controllers/[subproject]/`: folder for the controllers of this subproject. Take care with the last folder for avoid namespace problems while running the whole project.
-* `modules/[subproject]/app/controllers/[subproject]/Assets.scala`: it is necessary to implement an `object Assets extends controllers.AssetsBuilder` for every subproject.
-* `modules/[subproject]/app/views/[subproject]/`: folder for the views of this subproject. Take care with the last folder for avoid namespace problems while running the whole project.
-* `modules/[subproject]/public/`: folder for every public file of this subproject. Take care with possible namespace problems while running the whole project.
+* `modules/[subproject]/app/assets/javascripts/`: folder for CoffeeScript files of this subproject.
+* `modules/[subproject]/app/assets/stylesheets/`: folder for LESS files of this subproject.
+* `modules/[subproject]/app/controllers/`: folder for the controllers of this subproject.
+* `modules/[subproject]/app/controllers/Assets.scala`: it is necessary to implement an `object Assets extends controllers.AssetsBuilder` for every subproject.
+* `modules/[subproject]/app/views/[subproject]/`: folder for the views of this subproject.
+* `modules/[subproject]/public/`: folder for every public file of this subproject.
 * `modules/[subproject]/test/`: folder for every test file for this subproject.
 
-Please check the _Splitting the route file_ section within the documentation page about [SBT Sub-projects](http://www.playframework.com/documentation/2.3.x/SBTSubProjects).
+Please check the _Splitting the route file_ section within the documentation page about [SBT Sub-projects](http://www.playframework.com/documentation/2.4.x/SBTSubProjects).
 
 ### Configuration files
 
 As we want to run or test the whole project and also run, test or dist _admin_ and _web_ subprojects, we have several configuration files. Each one has its own particular purpose:
 
-* `conf/application.conf`: the configuration file that is called by default when the whole project is running. It simply includes the `shared.dev.conf` file.
+* `conf/root-dev.conf`: the configuration file that is called by default when the whole project is running. It simply includes the `shared.dev.conf` file.
 * `conf/shared.dev.conf`: declares all the development configuration shared for the whole project and every subproject.
 * `conf/shared.prod.conf`: includes the `shared.dev.conf` file and overrides every configuration that is specific for production and it is shared for the whole project and every subproject.
 
-* `modules/[subproject]/conf/application.conf`: the configuration file that is called by default when the [subproject] is running. It simply includes the `shared.dev.conf` and `[subproject].conf` files.
-* `modules/[subproject]/conf/[subproject].conf`: declares the specific configuration for this subproject for development or production. It must declare the Global object and route file for this subproject.
-* `modules/[subproject]/conf/prod.conf`: declares the specific configuration for this subproject for production. It includes the `shared.prod.conf` and `[subproject].conf` files.
+* `modules/[subproject]/conf/[subproject].conf`: declares the specific configuration for this subproject for development or production. It must declare the route file for this subproject.
+* `modules/[subproject]/conf/[subproject]-dev.conf`: the configuration file that is called by default when the [subproject] is running. It simply includes the `shared.dev.conf` and `[subproject].conf` files.
+* `modules/[subproject]/conf/[subproject]-prod.conf`: declares the specific configuration for this subproject for production. It includes the `shared.prod.conf` and `[subproject].conf` files.
 * `modules/[subproject]/conf/shared.dev.conf`: it is simply a copy of `conf/shared.dev.conf`. It must be copied here to be available for production distribution.
 * `modules/[subproject]/conf/shared.prod.conf`: it is simply a copy of `conf/shared.prod.conf`. It must be copied here to be available for production distribution.
 
 It has been added a key called `this.file` in many of the configuration files and it is shown in the index web page when you run it. Please, play with it to see how it is overridden by each configuration file depending the project and mode (dev or prod) you are running.
 
+The corresponding configuration file is correctly taken for each case thanks to the settings lines in `Common.scala`:
+
+    javaOptions += s"-Dconfig.resource=$module-dev.conf"
+
 __Tip:__ as files `shared.dev.conf` and `shared.prod.conf` for every subproject are the same as the general ones, you can use _aliases_ or _symbolic links_ for them in order to avoid to maintain all of them.
+
+### Assets: RequireJS, Digest, Etag, Gzip, Fingerprint
+
+To configure all of these features, for each service (`web` and `admin`) we have the following:
+
+    pipelineStages := Seq(rjs, digest, gzip)
+    RjsKeys.mainModule := s"main-$module"
+
+The first line declares the asset pipeline. The second one establishes the corresponding _RequireJS_ main config file to each module.
+
+Then you can put the common RequireJS modules in the subproject `common`, within the folder `modules/common/app/assets/javascripts/common/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`. Take care with possible namespace problems while running the whole project. In the example, the subproject _admin_ has other _RJS module_ within subfolder _admin_.
+
+The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must indicate the corresponding _RequireJS path_ to the common lib in the _RJS config file_ as:
+
+    require.config
+      paths:
+        common: "../lib/common/javascripts"
+        jquery: "../lib/jquery/jquery"
+        ...
+
+Now we just simply need to declare the RequireJS as:
+
+    <script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"></script>
+
+For more information, go to the documentation page about [Assets](http://www.playframework.com/documentation/2.4.x/Assets), the tutorial `play-2.3-highlights` in Activator UI, or the website of [RequireJS](http://requirejs.org).
+
+#### Custom AssetsBuilder
+
+In order to avoid code like this:
+
+    href="@routes.Assets.versioned("images/favicon.png")"
+    href="@routes.Assets.versioned("stylesheets/main.css")">
+    data-main="@routes.Assets.versioned("javascripts/main-web.js")"
+    src="@routes.Assets.versioned("lib/requirejs/require.js")"
+    src="@routes.Assets.versioned("lib/common/images/logo.png")"
+
+because it can be very tedious to remember the specific path for every resource depending of its type or if it's from the common subproject or not, I prefer using this syntax:
+
+    href="@routes.Assets.img("favicon.png")"
+    href="@routes.Assets.css("main.css")">
+    data-main="@routes.Assets.js("main-web.js")"
+    src="@routes.Assets.lib("requirejs/require.js")"
+    src="@routes.Assets.commonImg("logo.png")"
+
+To get that we only need to define a custom `AssetsBuilder` class (you can see it in `modules/common/app/controllers/Assets.scala`).
+
+    package controllers.common
+    class Assets extends AssetsBuilder(DefaultHttpErrorHandler) {
+      def public (path: String, file: Asset) = versioned(path, file)
+      def lib (path: String, file: Asset) = versioned(path, file)
+      def css (path: String, file: Asset) = versioned(path, file)
+      def commonCss (path: String, file: Asset) = versioned(path, file)
+      def js (path: String, file: Asset) = versioned(path, file)
+      def commonJs (path: String, file: Asset) = versioned(path, file)
+      def img (path: String, file: Asset) = versioned(path, file)
+      def commonImg (path: String, file: Asset) = versioned(path, file)
+    }
+
+Add a simple `Assets` class within the `controllers` folder of each subproject:
+
+    package controllers.web
+    class Assets extends controllers.common.Assets
+
+And add the following in the routes files:
+
+    GET     /public/*file        controllers.web.Assets.public(path="/public", file: Asset)
+    GET     /lib/*file           controllers.web.Assets.lib(path="/public/lib", file: Asset)
+    GET     /css/*file           controllers.web.Assets.css(path="/public/stylesheets", file: Asset)
+    GET     /js/*file            controllers.web.Assets.js(path="/public/javascripts", file: Asset)
+    GET     /img/*file           controllers.web.Assets.img(path="/public/images", file: Asset)
+    GET     /common/css/*file    controllers.web.Assets.commonCss(path="/public/lib/common/stylesheets", file: Asset)
+    GET     /common/js/*file     controllers.web.Assets.commonJs(path="/public/lib/common/javascripts", file: Asset)
+    GET     /common/img/*file    controllers.web.Assets.commonImg(path="/public/lib/common/images", file: Asset)
+
+#### Public files
+
+You can put the common public files in the subproject `common`, within the folder `modules/common/public/`. The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must access to them through their correspoding lib folder:
+
+    <img src="@routes.Assets.commonImg("play.svg")"></img>
+
+And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/public/`.
+
+#### Shared resources
+
+If you have shared resources between your subprojects, like for example uploaded images from your users, you need to render or download them from a shared folder. Note you can't consider a shared resource like a asset.
+
+The process is very similar than the custom `AssetsBuilder`:
+
+    package controllers.common
+    class SharedResources extends Controller {
+      private lazy val rscFolder = play.api.Play.current.configuration.getString("rsc.folder").get
+      private def rscPath (uri: String) = rscFolder + uri	
+      def rsc (file: String) = Action(Ok.sendFile(new File(rscPath(file))))
+    }
+
+Add a simple `SharedResources` class within the `controllers` folder of each subproject:
+
+    package controllers.web
+    class SharedResources extends controllers.common.SharedResources
+
+And add the following in the routes files:
+
+    GET     /rsc/*file         controllers.web.SharedResources.rsc(file: String)
+
+### RequestHandler
+
+We need a global RequestHandler to run the whole project and get to things:
+
+* Determine the subdomain for each request (`admin` or `web`) and delegate its behaviour to the corresponding subproject.
+* Rewrite the urls for the `css`, `js` and `img` assets for the corresponding subproject. This is because for the root project these resources are located at `public/lib/[subproject]/`.
+
+These things are done overriding the `routeRequest` method of the `RequestHandler`.
 
 ### Webjars
 
 The common [Webjars](http://www.webjars.org) are included within the field `Common.commonDependencies` in the file `project/Common.scala`. In our case:
 
     val commonDependencies = Seq(
-        ...
-        "org.webjars" % "jquery" % "2.1.1",
-        "org.webjars" % "bootstrap" % "3.2.0"
-        ...
+      ...
+      "org.webjars" % "jquery" % "2.1.4",
+      "org.webjars" % "bootstrap" % "3.3.5",
+      "org.webjars" % "requirejs" % "2.1.19"
+      ...
     )
 
 And the specific webjars for a subproject are declared in the file `modules/[subproject]/build.sbt`. For example, for the `web` subproject:
 
     libraryDependencies ++= Common.commonDependencies ++: Seq(
-        "org.webjars" % "bootswatch-cerulean" % "3.2.0-1"
+      "org.webjars" % "bootswatch-cerulean" % "3.3.4+1"
     )
 
 Then, to access to their resources simply remember they are inside `lib` folder. For the previous examples:
 
-    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootswatch-cerulean/css/bootstrap.min.css")">
-    <script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")"></script>
-    <script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.min.js")"></script>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.lib("bootswatch-cerulean/css/bootstrap.min.css")">
+    <script src="@routes.Assets.lib("jquery/jquery.min.js")"></script>
+    <script src="@routes.Assets.lib("bootstrap/js/bootstrap.min.js")"></script>
 
 If you have doubts about the specific route of any webjar resource, remember it is directly downloaded within the relative folder `target/web/web-modules/main/webjars/lib`. So you can easily check the file structure that has been downloaded by the webjar.
 
@@ -163,13 +277,13 @@ If you have doubts about the specific route of any webjar resource, remember it 
 
 The corresponding plugin needs to be active in file `project/plugins.sbt`.
 
-The common CoffeeScript files are in the subproject `common`, within the folder `modules/common/app/assets/javascripts`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`.  Take care with possible namespace problems while running the whole project, so it's better to put any file within a subfolder.
+The common CoffeeScript files are in the subproject `common`, within the folder `modules/common/app/assets/javascripts`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`.
 
 To access to the compiled file you simply have to reference to its JS equivalent:
 
-    <script src="@routes.Assets.versioned("javascripts/web/main.js")"></script>
+    <script src="@routes.Assets.js("main.js")"></script>
 
-For more information, go to the documentation page about [CoffeeScript](http://www.playframework.com/documentation/2.3.x/AssetsCoffeeScript).
+For more information, go to the documentation page about [CoffeeScript](http://www.playframework.com/documentation/2.4.x/AssetsCoffeeScript).
 
 ### LESS
 
@@ -180,50 +294,17 @@ The corresponding plugin needs to be active in file `project/plugins.sbt`. And t
 
 With that, every LESS file not prepended by an underscore (`_`) will be compiled, and they could import the code from the LESS files prepended by an underscore.
 
-The common LESS files are in the subproject `common`, within the folder `modules/common/app/assets/stylesheets/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/stylesheets/[subproject]/`. You could add the files directly in the folder `modules/[subproject]/app/assets/stylesheets/` but you should be careful with namespace collisions.
+The common LESS files are in the subproject `common`, within the folder `modules/common/app/assets/stylesheets/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/stylesheets/`.
 
-To import a common LESS file, import it directly as (you can check an example in `modules/admin/app/assets/stylesheets/admin/_variables.less`):
+To import a common LESS file, import it directly as (you can check an example in `modules/admin/app/assets/stylesheets/_variables.less`):
 
     @import "../../../../../common/app/assets/stylesheets/_common.less";
 
 To access to the compiled file you simply have to reference to its CSS equivalent:
 
-    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/web/main.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.css("main.css")">
 
-For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.3.x/AssetsLess).
-
-### Assets: RequireJS, Digest, Etag, Gzip, Fingerprint
-
-To configure all of these features, for each service (`web` and `admin`) we have the following:
-
-    pipelineStages := Seq(rjs, digest, gzip)
-	RjsKeys.mainModule := s"main-$module"
-
-The first line declares the asset pipeline. The second one establishes the corresponding _RequireJS_ main config file to each module.
-
-Then you can put the common RequireJS modules in the subproject `common`, within the folder `modules/common/app/assets/javascripts/common/`. And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/app/assets/javascripts/`. Take care with possible namespace problems while running the whole project. In the example, the subproject _admin_ has other _RJS module_ within subfolder _admin_.
-
-The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must indicate the corresponding _RequireJS path_ to the common lib in the _RJS config file_ as:
-
-    require.config {
-      paths: {
-        common: "../lib/common/javascripts"
-      }
-    }
-
-Now we just simply need to declare the RequireJS as:
-
-    <script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"></script>
-
-For more information, go to the documentation page about [Assets](http://www.playframework.com/documentation/2.3.x/Assets), the tutorial `play-2.3-highlights` in Activator UI, or the website of [RequireJS](http://requirejs.org).
-
-#### Public files
-
-You can put the common public files in the subproject `common`, within the folder `modules/common/public/`. The common Assets are packaged as Webjars for the other subprojects that depend on it, so you must access to them through their correspoding lib folder:
-
-    <img src="@routes.Assets.versioned("lib/common/images/normal-mini.png")"></img>
-
-And the specific code for each subproject will be added within its corresponding folder `modules/[subproject]/public/`. Take care with possible namespace problems while running the whole project.
+For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.4.x/AssetsLess).
 
 ### Development
 
@@ -241,7 +322,7 @@ or
 
     [play-multidomain-seed] $ run
 
-And that's all! The whole project will run using the `conf/application.conf` file enabling all the services at once. You can go with your browser and check the URLs:
+And that's all! The whole project will run using the `conf/root-dev.conf` file enabling all the services at once. You can go with your browser and check the URLs:
 
 * `myweb.com:9000` or `www.myweb.com:9000`: public webpage
 * `admin.myweb.com:9000`: private admin webpage
@@ -251,7 +332,7 @@ As you can see, you must add the default `9000` port, but you can use the port y
 If you want to run only one subproject separately, you have to get into the subproject and run:
 
     [play-multidomain-seed] $ project admin
-	[admin] $ run
+    [admin] $ run
 
 
 ### Test
@@ -265,7 +346,7 @@ To run the tests for every subproject at once, simply execute:
 And for a unique subproject, get into it and test it:
 
     [play-multidomain-seed] $ project admin
-	[admin] $ test
+    [admin] $ test
 
 ### Production
 
@@ -284,7 +365,7 @@ Now you have a zip file for each module.
 
 So you can extract wherever you want and execute them separately. For example with:
 
-    ./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &
+    ./admin-1.0-SNAPSHOT/bin/admin -Dconfig.resource=admin-prod.conf -Dhttp.port=9001 -Dapplication.secret=abcdefghijk &
 
 Note it is added the `&` at the end to run the app in the background. The PID will be stored in `RUNNING_PID` file, so when you want to stop the app, just execute:
 
@@ -294,11 +375,11 @@ If you would like to test the whole project in production mode, you should be ab
 
     [play-multidomain-seed] $ start
 
-Please, check the documentation about [Production Configuration](http://www.playframework.com/documentation/2.3.x/ProductionConfiguration) for more parameters. And also check about [Application Secret](http://www.playframework.com/documentation/2.3.x/ApplicationSecret).
+Please, check the documentation about [Production Configuration](http://www.playframework.com/documentation/2.4.x/ProductionConfiguration) for more parameters. And also check about [Application Secret](http://www.playframework.com/documentation/2.4.x/ApplicationSecret).
 
 ### Thanks to
 
-http://www.playframework.com/documentation/2.3.x/SBTSubProjects
+http://www.playframework.com/documentation/2.4.x/SBTSubProjects
 
 http://eng.kifi.com/multi-project-deployment-in-play-framework/ -> https://github.com/kifi/multiproject
 

@@ -8,7 +8,16 @@ GET     /							controllers.web.Application.index
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.web.Assets.versioned(path="/public", file: Asset)
+GET     /public/*file					controllers.web.Assets.public(path="/public", file: Asset)
+GET     /lib/*file						controllers.web.Assets.lib(path="/public/lib", file: Asset)
+GET     /css/*file						controllers.web.Assets.css(path="/public/stylesheets", file: Asset)
+GET     /js/*file							controllers.web.Assets.js(path="/public/javascripts", file: Asset)
+GET     /img/*file						controllers.web.Assets.img(path="/public/images", file: Asset)
+GET     /common/css/*file			controllers.web.Assets.commonCss(path="/public/lib/common/stylesheets", file: Asset)
+GET     /common/js/*file			controllers.web.Assets.commonJs(path="/public/lib/common/javascripts", file: Asset)
+GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/common/images", file: Asset)
+
+GET     /rsc/*file						controllers.web.SharedResources.rsc(file: String)
 
 
 ->  / common.Routes

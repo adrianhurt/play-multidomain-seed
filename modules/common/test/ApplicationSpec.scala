@@ -11,7 +11,6 @@ import java.io.File
 * You can mock out a whole application including requests, plugins etc.
 * For more information, consult the wiki.
 */
-@RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification {
 
 	val modulePath = new File("./modules/common/")
@@ -20,7 +19,7 @@ class ApplicationSpec extends Specification {
 
 		"send 404 on a bad request" in {
 			running(FakeApplication(path = modulePath)) {
-				route(FakeRequest(GET, "/boum")) must beNone        
+				route(FakeRequest(GET, "/boum")) must beSome.which (status(_) == NOT_FOUND)        
 			}
 		}
     

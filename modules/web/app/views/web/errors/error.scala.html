@@ -1,0 +1,8 @@
+@(request: RequestHeader, error: play.api.UsefulException)
+
+@views.html.web.main("WEB Oops, an error occurred") {
+
+	<h1>WEB Oops, an error occurred</h1>	
+	<p>This exception has been logged with id <strong>@error.id</strong>.</p>
+
+}

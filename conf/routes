@@ -4,8 +4,8 @@
 
 # Delegate routes to sub-projects
 
-->  / common.Routes
-
 ->  / admin.Routes
 
 ->  / web.Routes
+
+->  / common.Routes
