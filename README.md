@@ -23,6 +23,11 @@ Then, we have the following objectives:
   * How to share every common code to avoid duplications (models, controllers, views, CoffeeScript, LESS, ...).
   * How to use it for development, test and production.
 
+Also check my other projects:
+
+* [Play API REST Template [Play 2.4 - Scala]](https://github.com/adrianhurt/play-api-rest-seed)
+* [Play-Bootstrap3 - Play library for Bootstrap 3 [Scala & Java]](http://play-bootstrap3.herokuapp.com)
+
 ### Multiproject
 
 This template has 3 subprojects:
