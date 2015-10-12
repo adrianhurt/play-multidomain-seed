@@ -371,7 +371,7 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 		<div>
 			<h2>RequestHandler</h2>
 			
-			<p>We need a global RequestHandler to run the whole project and get to things:</p>
+			<p>We need a global <code>RequestHandler</code> to run the whole project and get to things:</p>
 			
 			<ul>
 				<li>
@@ -384,6 +384,13 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 			</ul>
 			
 			<p>These things are done overriding the <code>routeRequest</code> method of the <a href="#code/app/RequestHandler.scala" class="shortcut">RequestHandler</a>.</p>
+		</div>
+		<div>
+			<h2>ErrorHandler</h2>
+			
+			<p>As we did with <a href="#code/app/RequestHandler.scala" class="shortcut">RequestHandler</a>, we also need to do the same for <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a>. In this case, we have a global <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a> and  specific <a href="#code/modules/admin/app/ErrorHandler.scala" class="shortcut">admin.ErrorHandler</a> and <a href="#code/modules/web/app/ErrorHandler.scala" class="shortcut">web.ErrorHandler</a>.</p>
+			
+			<p>When running the whole project, the global one will determine the subdomain for each request and delegate its behaviour to the corresponding subproject. Remember that is necessary to declare each specific <code>ErrorHandler</code> withing the corresponding configuration file.</p>
 		</div>
 		<div>
 			<h2>Webjars</h2>

@@ -245,12 +245,17 @@ And add the following in the routes files:
 
 ### RequestHandler
 
-We need a global RequestHandler to run the whole project and get to things:
+We need a global `RequestHandler` to run the whole project and get to things:
 
 * Determine the subdomain for each request (`admin` or `web`) and delegate its behaviour to the corresponding subproject.
 * Rewrite the urls for the `css`, `js` and `img` assets for the corresponding subproject. This is because for the root project these resources are located at `public/lib/[subproject]/`.
 
 These things are done overriding the `routeRequest` method of the `RequestHandler`.
+
+### ErrorHandler
+
+As we did with `RequestHandler`, we also need to do the same for `ErrorHandler`. In this case, we have a global `ErrorHandler` and  specific `admin.ErrorHandler` and `web.ErrorHandler`.
+When running the whole project, the global one will determine the subdomain for each request and delegate its behaviour to the corresponding subproject. Remember that is necessary to declare each specific `ErrorHandler` withing the corresponding configuration file.
 
 ### Webjars
 
