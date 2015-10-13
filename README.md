@@ -45,6 +45,7 @@ play-multidomain-seed
  └ build.sbt
  └ app
    └ RequestHandler.scala
+   └ ErrorHandler.scala
  └ conf
    └ root-dev.conf
    └ routes
@@ -315,6 +316,24 @@ To access to the compiled file you simply have to reference to its CSS equivalen
     <link rel="stylesheet" media="screen" href="@routes.Assets.css("main.css")">
 
 For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.4.x/AssetsLess).
+
+### Internationalization: Messages files
+
+Well... it's a tricky one. We need the corresponding messages files within the conf directory of each subproject.  But we have 2 problems:
+
+* What about sharing some message definitions from common subproject?
+* We also need the corresponding messages files for root project with all the message definitions.
+
+In fact, the main purpose of this project is to show you how to share and reduce your code, so let's go.
+
+To resolve that, we need to take advantage of `sbt`. So a new [`resourceGenerator`](http://www.scala-sbt.org/release/docs/Howto-Generating-Files.html#Generate+resources) has been defined in `project/Common.scala` that is executed each time the project is compiled. It works in the following way:
+
+* Put your shared messages files within `modules/common/conf/messages/`.
+* Put your specific messages files for each services within `modules/[subproject]/conf/messages/`.
+* Use the `messagesFilesFrom` argument of `appSettings` and `serviceSettings` methods of `Common.scala` to specify the list and priority of the corresponding subprojects messages files used for each one. In the example, for `web` subproject `messagesFilesFrom = Seq("common", "web")` and for root project `messagesFilesFrom = Seq("common", "admin", "web")`.
+* Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones.
+
+__*Assumption*__: if there are 2 coincidences within the same file, the last one will be taken. So it is ordered from lower to higher priority.
 
 ### Development
 

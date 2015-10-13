@@ -1,4 +1,4 @@
-Common.serviceSettings("admin")
+Common.serviceSettings("admin", messagesFilesFrom = Seq("common", "admin"))
 
 // Add here the specific settings for this module
 

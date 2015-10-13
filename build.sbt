@@ -1,4 +1,4 @@
-Common.appSettings
+Common.appSettings(messagesFilesFrom = Seq("common", "admin", "web"))
 
 
 lazy val common = (project in file("modules/common")).enablePlugins(PlayScala)

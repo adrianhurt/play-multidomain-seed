@@ -1,0 +1,17 @@
+
+
+################################################################################################
+# COMMON
+
+reload=reload
+button=Launch demo modal using CoffeeScript
+
+computers=Computers
+computer.name=Name
+computer.introduced=Introduced
+computer.discontinued=Discontinued
+computer.company=Company
+
+modal.title=Modal title
+modal.text=This is a modal
+modal.close=Close

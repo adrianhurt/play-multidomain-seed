@@ -5,6 +5,8 @@
 # Home page
 GET     /							controllers.web.Application.index
 
+GET     /lang/$lang<(en|es)>		controllers.web.Application.selectLang(lang: String)
+
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -1,4 +1,4 @@
-Common.serviceSettings("web")
+Common.serviceSettings("web", messagesFilesFrom = Seq("common", "web"))
 
 // Add here the specific settings for this module
 

@@ -5,6 +5,8 @@
 # Home page
 GET     /							controllers.admin.Application.index
 
+GET     /lang/$lang<(en|es)>		controllers.admin.Application.selectLang(lang: String)
+
 
 
 # Map static resources from the /public folder to the /assets URL path
@@ -18,5 +20,6 @@ GET     /common/js/*file			controllers.admin.Assets.commonJs(path="/public/lib/c
 GET     /common/img/*file			controllers.admin.Assets.commonImg(path="/public/lib/common/images", file: Asset)
 
 GET     /rsc/*file						controllers.admin.SharedResources.rsc(file: String)
+
 
 ->  / common.Routes

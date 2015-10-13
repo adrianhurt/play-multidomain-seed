@@ -501,6 +501,33 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 			</p>
 		</div>
 		<div>
+			<h2>Internationalization: Messages files</h2>
+			
+			<p>Well... it's a tricky one. We need the corresponding messages files within the conf directory of each subproject.  But we have 2 problems:</p>
+			
+			<ul>
+				<li>What about sharing some message definitions from common subproject?</li>
+				<li>We also need the corresponding messages files for root project with all the message definitions.</li>
+			</ul>
+			
+			<p>In fact, the main purpose of this project is to show you how to share and reduce your code, so let's go.</p>
+			
+			<p>
+				To resolve that, we need to take advantage of <code>sbt</code>. So a new
+				<a href="http://www.scala-sbt.org/release/docs/Howto-Generating-Files.html#Generate+resources" target="_blank">resourceGenerator</a> has been defined in
+				<a href="#code/project/Common.scala" class="shortcut">Common.scala</a> that is executed each time the project is compiled. It works in the following way:
+			</p>
+			
+			<ul>
+				<li>Put your shared messages files within <a href="#code/modules/common/conf/messages" class="shortcut">modules/common/conf/messages/</a>.</li>
+				<li>Put your specific messages files for each services within <a href="#code/modules/web/conf/messages" class="shortcut">modules/[subproject]/conf/messages/</a>.</li>
+				<li>Use the <code>messagesFilesFrom</code> argument of <code>appSettings</code> and <code>serviceSettings</code> methods of <a href="#code/project/Common.scala" class="shortcut">Common.scala</a> to specify the list and priority of the corresponding subprojects messages files used for each one. In the example, for <a href="#code/modules/web/build.sbt" class="shortcut">web</a> subproject <a href="#code/modules/web/build.sbt" class="shortcut">messagesFilesFrom = Seq("common", "web")</a> and for root project <a href="#code/build.sbt" class="shortcut">messagesFilesFrom = Seq("common", "admin", "web")</a>.</li>
+				<li>Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones.</li>
+			</ul>
+			
+			<p><strong><em>Assumption</em></strong>: if there are 2 coincidences within the same file, the last one will be taken. So it is ordered from lower to higher priority.</p>
+		</div>
+		<div>
 			<h2>Development</h2>
 			
 			<p>
