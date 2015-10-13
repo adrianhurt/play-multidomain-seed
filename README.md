@@ -130,16 +130,16 @@ As we want to run or test the whole project and also run, test or dist _admin_ a
 * `modules/[subproject]/conf/[subproject].conf`: declares the specific configuration for this subproject for development or production. It must declare the route file for this subproject.
 * `modules/[subproject]/conf/[subproject]-dev.conf`: the configuration file that is called by default when the [subproject] is running. It simply includes the `shared.dev.conf` and `[subproject].conf` files.
 * `modules/[subproject]/conf/[subproject]-prod.conf`: declares the specific configuration for this subproject for production. It includes the `shared.prod.conf` and `[subproject].conf` files.
-* `modules/[subproject]/conf/shared.dev.conf`: it is simply a copy of `conf/shared.dev.conf`. It must be copied here to be available for production distribution.
-* `modules/[subproject]/conf/shared.prod.conf`: it is simply a copy of `conf/shared.prod.conf`. It must be copied here to be available for production distribution.
+
+As you can see, we have some shared configuration files: `shared.dev.conf` and `shared.prod.conf`. And we need them for every project (the root one and the subprojects).
+Both files shoud be replicated within each `conf` directory for every subproject. But there is an easy way to avoid code replication and minimize errors, and it's defining a new [resourceGenerator](http://www.scala-sbt.org/release/docs/Howto-Generating-Files.html#Generate+resources) within `project/Common.scala`.
+Then, each time the code is compiled, every `shared.*.conf` file will be replicated within the corresponding path. Note these files will __only__ be generated within the `target` file.
 
 It has been added a key called `this.file` in many of the configuration files and it is shown in the index web page when you run it. Please, play with it to see how it is overridden by each configuration file depending the project and mode (dev or prod) you are running.
 
 The corresponding configuration file is correctly taken for each case thanks to the settings lines in `Common.scala`:
 
     javaOptions += s"-Dconfig.resource=$module-dev.conf"
-
-__Tip:__ as files `shared.dev.conf` and `shared.prod.conf` for every subproject are the same as the general ones, you can use _aliases_ or _symbolic links_ for them in order to avoid to maintain all of them.
 
 ### Assets: RequireJS, Digest, Etag, Gzip, Fingerprint
 
@@ -331,7 +331,7 @@ To resolve that, we need to take advantage of `sbt`. So a new [`resourceGenerato
 * Put your shared messages files within `modules/common/conf/messages/`.
 * Put your specific messages files for each services within `modules/[subproject]/conf/messages/`.
 * Use the `messagesFilesFrom` argument of `appSettings` and `serviceSettings` methods of `Common.scala` to specify the list and priority of the corresponding subprojects messages files used for each one. In the example, for `web` subproject `messagesFilesFrom = Seq("common", "web")` and for root project `messagesFilesFrom = Seq("common", "admin", "web")`.
-* Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones.
+* Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones. Note these files will __only__ be generated within the `target` file.
 
 __*Assumption*__: if there are 2 coincidences within the same file, the last one will be taken. So it is ordered from lower to higher priority.
 

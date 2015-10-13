@@ -226,16 +226,18 @@
 					<a href="#code/modules/admin/conf/admin-prod.conf" class="shortcut">modules/[subproject]/conf/[subproject]-prod.conf</a>:
 					declares the specific configuration for this subproject for production. It includes the
 					<em>shared.prod.conf</em> and <em>[subproject].conf</em> files.
-				</li>
-				<li>
-					<a href="#code/modules/admin/conf/shared.dev.conf" class="shortcut">modules/[subproject]/conf/shared.dev.conf</a>:
-					it is simply a copy of <em>conf/shared.dev.conf</em>. It must be copied here to beavailable for production distribution.
-				</li>
-				<li>
-					<a href="#code/modules/admin/conf/shared.prod.conf" class="shortcut">modules/[subproject]/conf/shared.prod.conf</a>:
-					it is simply a copy of <em>conf/shared.prod.conf</em>. It must be copied here to be available for production distribution.
-				</li>
 			</ul>
+			
+			<p>
+				As you can see, we have some shared configuration files: <a href="#code/conf/shared.dev.conf" class="shortcut">shared.dev.conf</a>
+				and <a href="#code/conf/shared.prod.conf" class="shortcut">shared.prod.conf</a>. And we need them for every project (the root one and
+				the subprojects). Both files shoud be replicated within each <code>conf</code> directory for every subproject. But there is an easy
+				way to avoid code replication and minimize errors, and it's defining a new
+				<a href="http://www.scala-sbt.org/release/docs/Howto-Generating-Files.html#Generate+resources" target="_blank">resourceGenerator</a>
+				within <a href="#code/project/Common.scala" class="shortcut">Common.scala</a>. Then, each time the code is compiled, every
+				<code>shared.*.conf</code> file will be replicated within the corresponding path. Note these files will <strong>only</strong> be
+				generated within the <code>target</code> file.
+			</p>
 			
 			<p>
 				It has been added a key called <em>this.file</em> in many of the configuration files and it is shown in the
@@ -522,7 +524,7 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 				<li>Put your shared messages files within <a href="#code/modules/common/conf/messages" class="shortcut">modules/common/conf/messages/</a>.</li>
 				<li>Put your specific messages files for each services within <a href="#code/modules/web/conf/messages" class="shortcut">modules/[subproject]/conf/messages/</a>.</li>
 				<li>Use the <code>messagesFilesFrom</code> argument of <code>appSettings</code> and <code>serviceSettings</code> methods of <a href="#code/project/Common.scala" class="shortcut">Common.scala</a> to specify the list and priority of the corresponding subprojects messages files used for each one. In the example, for <a href="#code/modules/web/build.sbt" class="shortcut">web</a> subproject <a href="#code/modules/web/build.sbt" class="shortcut">messagesFilesFrom = Seq("common", "web")</a> and for root project <a href="#code/build.sbt" class="shortcut">messagesFilesFrom = Seq("common", "admin", "web")</a>.</li>
-				<li>Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones.</li>
+				<li>Each time the code is compiled, every needed messages file will be generated appending the corresponding previous ones. Note these files will <strong>only</strong> be generated within the <code>target</code> file.</li>
 			</ul>
 			
 			<p><strong><em>Assumption</em></strong>: if there are 2 coincidences within the same file, the last one will be taken. So it is ordered from lower to higher priority.</p>

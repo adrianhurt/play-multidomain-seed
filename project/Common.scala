@@ -32,7 +32,9 @@ object Common {
 	)
 	// Settings for every module, i.e. for every subproject
 	def moduleSettings (module: String) = settings(module) ++: Seq(
-		javaOptions += s"-Dconfig.resource=$module-dev.conf"
+		javaOptions += s"-Dconfig.resource=$module-dev.conf",
+		sharedConfFilesReplicator in Compile := sharedConfFilesReplicate(baseDirectory.value / ".." / "..", resourceManaged.value, streams.value.log),
+		resourceGenerators in Compile <+= (sharedConfFilesReplicator in Compile)
 	)
 	// Settings for every service, i.e. for admin and web subprojects
 	def serviceSettings (module: String, messagesFilesFrom: Seq[String]) = moduleSettings(module) ++: Seq(
@@ -60,6 +62,23 @@ object Common {
 	
 	
 	/*
+	* Utilities to replicate shared.*.conf files
+	*/
+	
+	lazy val sharedConfFilesReplicator = taskKey[Seq[File]]("Replicate shared.*.conf files.")
+	
+	def sharedConfFilesReplicate (rootDir: File, managedDir: File, log: Logger): Seq[File] = {
+		val files = ((rootDir / "conf") ** "shared.*.conf").get
+		val destinationDir = managedDir / "conf"
+		destinationDir.mkdirs()
+		files.map { file =>
+			val destinationFile = destinationDir / file.getName()
+			IO.copyFile(file, destinationFile)
+			file
+		}
+	}
+	
+	/*
 	* Utilities to generate the messages files
 	*/
 	
@@ -68,12 +87,12 @@ object Common {
 	
 	lazy val messagesGenerator = taskKey[Seq[File]]("Generate the messages resource files.")
 	
-	def messagesGenerate (messagesFilesFrom: Seq[String], baseDir: File, managedDir: File, log: Logger): Seq[File] = {		
+	def messagesGenerate (messagesFilesFrom: Seq[String], rootDir: File, managedDir: File, log: Logger): Seq[File] = {
 		val destinationDir = managedDir / "conf"
 		destinationDir.mkdirs()
 		val files = langs.map { lang =>
 			val messagesFilename = s"messages.$lang"
-			val originFiles = messagesFilesFrom.map(subproject => baseDir / "modules" / subproject / "conf" / "messages" / messagesFilename)
+			val originFiles = messagesFilesFrom.map(subproject => rootDir / "modules" / subproject / "conf" / "messages" / messagesFilename)
 			val destinationFile = destinationDir / messagesFilename
 			IO.write(destinationFile, "## GENERATED FILE ##\n\n", append = false)
 			originFiles.map { file =>
