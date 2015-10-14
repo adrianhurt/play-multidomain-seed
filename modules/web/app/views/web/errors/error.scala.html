@@ -1,8 +1,5 @@
-@(request: RequestHeader, error: play.api.UsefulException)
-
+@(request: RequestHeader, error: play.api.UsefulException)(implicit messages: Messages)
 @views.html.web.main("WEB Oops, an error occurred") {
-
-	<h1>WEB Oops, an error occurred</h1>	
-	<p>This exception has been logged with id <strong>@error.id</strong>.</p>
-
+	<h1>WEB @Messages("error.unknown.title")</h1>
+	<p>@Messages("error.unknown.text", error.id)</p>
 }

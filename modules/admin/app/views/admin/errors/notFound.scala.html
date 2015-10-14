@@ -1,8 +1,5 @@
-@(request: RequestHeader)
-
+@(request: RequestHeader)(implicit messages: Messages)
 @views.html.admin.main("ADMIN Handler Not Found") {
-
-  <h1>ADMIN Handler Not Found</h1>	
-  <p>For request '@request.method @request.uri'</p>
-    
+  <h1>ADMIN @Messages("error.notfound.title")</h1>
+	<p>@Messages("error.notfound.text", request.method + " " + request.uri)</p>
 }
