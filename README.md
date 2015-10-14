@@ -317,7 +317,7 @@ To access to the compiled file you simply have to reference to its CSS equivalen
 
 For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.4.x/AssetsLess).
 
-### Internationalization: Messages files
+### Internationalization: how to split messages files
 
 Well... it's a tricky one. We need the corresponding messages files within the conf directory of each subproject.  But we have 2 problems:
 
