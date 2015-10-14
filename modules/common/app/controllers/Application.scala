@@ -4,9 +4,9 @@ import play.api._
 import play.api.mvc._
 
 class Application extends Controller {
-  
-	def status = Action {
-		Ok("Everything is great!")
-	}
-  
+
+  def status = Action {
+    Ok("Everything is great!")
+  }
+
 }

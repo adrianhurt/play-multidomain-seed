@@ -9,3 +9,5 @@ libraryDependencies ++= Common.commonDependencies ++: Seq(
 	// jdbc,
 	// anorm
 )
+
+scalariformSettings

@@ -11,3 +11,5 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala).aggregate(common
 
 
 libraryDependencies ++= Common.commonDependencies
+
+scalariformSettings
