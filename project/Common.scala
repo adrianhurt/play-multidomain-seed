@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import play.PlayImport._
+import play.sbt.PlayImport._
 import play.sbt.routes.RoutesKeys.routesGenerator
 import play.routes.compiler.InjectedRoutesGenerator
 import com.typesafe.sbt.web.SbtWeb.autoImport.{Assets, pipelineStages}
