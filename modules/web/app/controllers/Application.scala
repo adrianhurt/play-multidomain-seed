@@ -3,7 +3,6 @@ package controllers.web
 import models.web._
 import play.api._
 import play.api.mvc._
-import play.api.Play.current
 import play.api.i18n.{ I18nSupport, MessagesApi, Messages, Lang }
 import javax.inject.Inject
 
