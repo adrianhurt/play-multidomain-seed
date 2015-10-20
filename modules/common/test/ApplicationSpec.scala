@@ -7,29 +7,29 @@ import play.api.test.Helpers._
 import java.io.File
 
 /**
-* Add your spec here.
-* You can mock out a whole application including requests, plugins etc.
-* For more information, consult the wiki.
-*/
+ * Add your spec here.
+ * You can mock out a whole application including requests, plugins etc.
+ * For more information, consult the wiki.
+ */
 class ApplicationSpec extends Specification {
 
-	val modulePath = new File("./modules/common/")
-	
-	"Common Module" should {
+  val modulePath = new File("./modules/common/")
 
-		"send 404 on a bad request" in {
-			running(FakeApplication(path = modulePath)) {
-				route(FakeRequest(GET, "/boum")) must beSome.which (status(_) == NOT_FOUND)        
-			}
-		}
-    
-		"render the status page" in {
-			running(FakeApplication(path = modulePath)) {
-				val home = route(FakeRequest(GET, "/status")).get
-        
-				status(home) must equalTo(OK)
-				contentAsString(home) must contain ("Everything is great")
-			}
-		}
-	}
+  "Common Module" should {
+
+    "send 404 on a bad request" in {
+      running(FakeApplication(path = modulePath)) {
+        route(FakeRequest(GET, "/boum")) must beSome.which(status(_) == NOT_FOUND)
+      }
+    }
+
+    "render the status page" in {
+      running(FakeApplication(path = modulePath)) {
+        val home = route(FakeRequest(GET, "/status")).get
+
+        status(home) must equalTo(OK)
+        contentAsString(home) must contain("Everything is great")
+      }
+    }
+  }
 }
