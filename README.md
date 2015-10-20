@@ -23,10 +23,15 @@ Then, we have the following objectives:
   * How to share every common code to avoid duplications (models, controllers, views, CoffeeScript, LESS, ...).
   * How to use it for development, test and production.
 
+
+And please, don't forget starring this project if you consider it has been useful for you.
+
 Also check my other projects:
 
-* [Play API REST Template [Play 2.4 - Scala]](https://github.com/adrianhurt/play-api-rest-seed)
+* [Play Multidomain Auth [Play 2.4 - Scala]](https://github.com/adrianhurt/play-multidomain-auth)
 * [Play-Bootstrap3 - Play library for Bootstrap 3 [Scala & Java]](http://play-bootstrap3.herokuapp.com)
+* [Play Silhouette Credentials Seed](https://github.com/adrianhurt/play-silhouette-credentials-seed)
+* [Play API REST Template [Play 2.4 - Scala]](https://github.com/adrianhurt/play-api-rest-seed)
 
 ### Multiproject
 
