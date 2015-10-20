@@ -192,7 +192,7 @@ because it can be very tedious to remember the specific path for every resource 
 To get that we only need to define a custom `AssetsBuilder` class (you can see it in `modules/common/app/controllers/Assets.scala`).
 
     package controllers.common
-    class Assets extends AssetsBuilder(DefaultHttpErrorHandler) {
+    class Assets(errorHandler: DefaultHttpErrorHandler) extends AssetsBuilder(errorHandler) {
       def public (path: String, file: Asset) = versioned(path, file)
       def lib (path: String, file: Asset) = versioned(path, file)
       def css (path: String, file: Asset) = versioned(path, file)
@@ -206,7 +206,7 @@ To get that we only need to define a custom `AssetsBuilder` class (you can see i
 Add a simple `Assets` class within the `controllers` folder of each subproject:
 
     package controllers.web
-    class Assets extends controllers.common.Assets
+    class Assets @Inject() (val errorHandler: web.ErrorHandler) extends controllers.common.Assets(errorHandler)
 
 And add the following in the routes files:
 
@@ -234,20 +234,21 @@ If you have shared resources between your subprojects, like for example uploaded
 The process is very similar than the custom `AssetsBuilder`:
 
     package controllers.common
-    class SharedResources extends Controller {
-      private lazy val rscFolder = play.api.Play.current.configuration.getString("rsc.folder").get
-      private def rscPath (uri: String) = rscFolder + uri	
-      def rsc (file: String) = Action(Ok.sendFile(new File(rscPath(file))))
+    abstract class SharedResources(errorHandler: DefaultHttpErrorHandler, conf: Configuration) extends Controller with utils.ConfigSupport {
+      private lazy val path = confRequiredString("rsc.folder")
+      def rsc(filename: String) = Action.async { implicit request =>  ... render the file ... }
     }
 
 Add a simple `SharedResources` class within the `controllers` folder of each subproject:
 
     package controllers.web
-    class SharedResources extends controllers.common.SharedResources
+    class SharedResources @Inject() (val errorHandler: web.ErrorHandler, val conf: Configuration) extends controllers.common.SharedResources(errorHandler, conf)
 
 And add the following in the routes files:
 
     GET     /rsc/*file         controllers.web.SharedResources.rsc(file: String)
+
+_Note:_ remember to set the absolute path to common resources folder with `rsc.folder` at the configuration file. Specially for production.
 
 ### RequestHandler
 
@@ -383,6 +384,8 @@ And for a unique subproject, get into it and test it:
     [admin] $ test
 
 ### Production
+
+_Note:_ remember to set the absolute path to common resources folder with `rsc.folder` at the configuration file.
 
 Simply execute:
 

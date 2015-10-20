@@ -369,6 +369,8 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 			<p>And add the following in the routes files (check it <a href="#code/modules/web/conf/web.routes" class="shortcut">here</a>):</p>
 			
 <pre>GET     /rsc/*file         controllers.web.SharedResources.rsc(file: String)</pre>
+
+			<p><em>Note:</em> remember to set the absolute path to common resources folder with `rsc.folder` at the configuration file. Specially for production.</p>
 		</div>
 		<div>
 			<h2>RequestHandler</h2>
@@ -593,6 +595,8 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 		</div>
 		<div>
 			<h2>Production</h2>
+			
+			<p><em>Note:</em> remember to set the absolute path to common resources folder with `rsc.folder` at the configuration file.</p>
 			
 			<p>Simply execute:</p>
 
