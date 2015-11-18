@@ -255,7 +255,7 @@ _Note:_ remember to set the absolute path to common resources folder with `rsc.f
 We need a global `RequestHandler` to run the whole project and get to things:
 
 * Determine the subdomain for each request (`admin` or `web`) and delegate its behaviour to the corresponding subproject.
-* Rewrite the urls for the `css`, `js` and `img` assets for the corresponding subproject. This is because for the root project these resources are located at `public/lib/[subproject]/`.
+* Rewrite the urls for the `public`, `css`, `js` and `img` assets for the corresponding subproject. This is because for the root project these resources are located at `public/lib/[subproject]/`.
 
 These things are done overriding the `routeRequest` method of the `RequestHandler`.
 

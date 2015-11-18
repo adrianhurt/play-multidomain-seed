@@ -9,11 +9,9 @@ class VirtualHostRequestHandler @Inject() (errorHandler: HttpErrorHandler,
   webRouter, errorHandler, configuration, filters
 ) {
 
-  override def routeRequest(request: RequestHeader) = {
-    getSubdomain(request) match {
-      case "admin" => tryRewrite("admin", request, adminRouter)
-      case _ => tryRewrite("web", request, webRouter)
-    }
+  override def routeRequest(request: RequestHeader) = getSubdomain(request) match {
+    case "admin" => adminRouter.routes.lift(rewriteAssets("admin", request))
+    case _ => webRouter.routes.lift(rewriteAssets("web", request))
   }
 
   /*
@@ -22,30 +20,19 @@ class VirtualHostRequestHandler @Inject() (errorHandler: HttpErrorHandler,
   private def getSubdomain(request: RequestHeader) = request.domain.replaceFirst("[\\.]?[^\\.]+[\\.][^\\.]+$", "")
 
   /*
-	* Tries one of the following url rewrites:
-	* /css/ *file -> /public/lib/subproject/stylesheets/ *file
-	* /js/ *file -> /public/lib/subproject/javascripts/ *file
-	* /img/ *file -> /public/lib/subproject/images/ *file
+	* Rewrite the Assets routes for the root project, accessing to the corresponding lib.
 	*/
-  private def tryRewrite(subproject: String, request: RequestHeader, router: Router) = {
-    val css = s"""/*css/(.*)""".r
-    val js = s"""/*js/(.*)""".r
-    val img = s"""/*img/(.*)""".r
+  private def rewriteAssets(subproject: String, request: RequestHeader): RequestHeader = {
+    val pub = s"""/public/(.*)""".r
+    val css = s"""/css/(.*)""".r
+    val js = s"""/js/(.*)""".r
+    val img = s"""/img/(.*)""".r
     request.path match {
-      case css(file) => redirect(s"/lib/$subproject/stylesheets/$file")
-      case js(file) => redirect(s"/lib/$subproject/javascripts/$file")
-      case img(file) => redirect(s"/lib/$subproject/images/$file")
-      case _ => router.routes.lift(request)
+      case pub(file) => request.copy(path = s"/lib/$subproject/$file")
+      case css(file) => request.copy(path = s"/lib/$subproject/stylesheets/$file")
+      case js(file) => request.copy(path = s"/lib/$subproject/javascripts/$file")
+      case img(file) => request.copy(path = s"/lib/$subproject/images/$file")
+      case _ => request
     }
   }
-  /*
-	* Gets an Option[Handler] from a redirect
-	*/
-  private def redirect(path: String) = Some(
-    EssentialAction { rh =>
-      Action { rh: RequestHeader =>
-        Results.Redirect(path)
-      }.apply(rh)
-    }
-  )
 }
