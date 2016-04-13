@@ -53,7 +53,6 @@ play-multidomain-seed
    └ ErrorHandler.scala
  └ conf
    └ root-dev.conf
-   └ routes
  └ project
    └ build.properties
    └ plugins.sbt
@@ -97,7 +96,6 @@ Let's try to explain briefly how it is configured. For running the whole project
 
 * `build.sbt`: configures root project and declares every subproject.
 * `conf/root-dev.conf` _(used when whole project is running)_: the default one. In the next section it is explained in detail.
-* `conf/routes` _(used when whole project is running)_: routes file for the whole project. It simply imports the routes file of every subproject.
 * `app/RequestHandler.scala` _(used when whole project is running)_: the RequestHandler object for the whole project. It determines the subdomain for each request (admin or web) and delegates its behaviour to the corresponding subproject.
 
 And for running each subproject independently:
