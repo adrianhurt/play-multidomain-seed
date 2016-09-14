@@ -1,10 +1,9 @@
 package controllers.common
 
 import play.api.mvc._
-import play.api.libs.MimeTypes
-import play.api.libs.iteratee.Enumerator
-import play.api.http.{ DefaultHttpErrorHandler, ContentTypes }
+import play.api.http.DefaultHttpErrorHandler
 import play.api.Configuration
+import net.ceedubs.ficus.Ficus._
 import controllers.AssetsBuilder
 import controllers.Assets.Asset
 import scala.concurrent.Future
@@ -26,17 +25,14 @@ class Assets(errorHandler: DefaultHttpErrorHandler) extends AssetsBuilder(errorH
 * Shared resources between subprojects. The base path is defined by the "rsc.folder" in the conf file.
 * It's an extremely simpliflied version of the code from Assets.scala (https://github.com/playframework/playframework/blob/2.4.x/framework/src/play/src/main/scala/play/api/controllers/Assets.scala)
 */
-abstract class SharedResources(errorHandler: DefaultHttpErrorHandler, conf: Configuration) extends Controller with utils.ConfigSupport {
-  private lazy val path = confRequiredString("rsc.folder")
+abstract class SharedResources(errorHandler: DefaultHttpErrorHandler, conf: Configuration) extends Controller {
+  private lazy val path = conf.underlying.as[String]("rsc.folder")
 
   def rsc(filename: String) = Action.async { implicit request =>
     {
       val file = new File(path + filename)
       if (file.exists() && file.isFile())
-        Future.successful(Result(
-          ResponseHeader(OK, Map(CONTENT_LENGTH -> file.length.toString, CONTENT_TYPE -> MimeTypes.forFileName(filename).getOrElse(ContentTypes.BINARY))),
-          Enumerator.fromFile(file)
-        ))
+        Future.successful(Ok.sendFile(file))
       else
         errorHandler.onClientError(request, NOT_FOUND, "File not found")
     }.recoverWith {

@@ -2,7 +2,6 @@ import sbt._
 import Keys._
 import play.sbt.PlayImport._
 import play.sbt.routes.RoutesKeys.routesGenerator
-import play.routes.compiler.InjectedRoutesGenerator
 import com.typesafe.sbt.web.SbtWeb.autoImport.{Assets, pipelineStages}
 import com.typesafe.sbt.less.Import.LessKeys
 import com.typesafe.sbt.rjs.Import.{rjs, RjsKeys}
@@ -19,10 +18,13 @@ object Common {
     organization := "com.myweb",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.11.7",
-    routesGenerator := InjectedRoutesGenerator,
     doc in Compile <<= target.map(_ / "none"),
-    scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-language:reflectiveCalls"),
-    resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
+    scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-language:reflectiveCalls", "-language:postfixOps", "-language:implicitConversions"),
+    resolvers ++= Seq(
+      "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
+      "Atlassian Releases" at "https://maven.atlassian.com/public/",
+      Resolver.sonatypeRepo("snapshots")
+    )
   )
   // Settings for the app, i.e. the root project
   def appSettings (messagesFilesFrom: Seq[String]) = settings(appName) ++: Seq(
@@ -50,9 +52,10 @@ object Common {
     cache,
     ws,
     specs2 % Test,
-    "org.webjars" % "jquery" % "2.1.4",
-    "org.webjars" % "bootstrap" % "3.3.5" exclude("org.webjars", "jquery"),
-    "org.webjars" % "requirejs" % "2.1.19"
+    "org.webjars" % "jquery" % "3.1.0",
+    "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
+    "org.webjars" % "requirejs" % "2.3.1",
+    "com.iheart" %% "ficus" % "1.2.6"
     // Add here more common dependencies:
     // jdbc,
     // anorm,

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>
-			Multidomain Seed for Play Framework 2.4
+			Multidomain Seed for Play Framework 2.5
 		</title>
 	</head>
 	<body>
@@ -43,7 +43,7 @@
 					<ul>
 						<li><a href="http://www.webjars.org" target="_blank">Webjars</a>.</li>
 						<li><a href="http://coffeescript.org" target="_blank">CoffeeScript</a> and <a href="http://lesscss.org" target="_blank">LESS</a> Assets.</li>
-						<li><a href="http://www.playframework.com/documentation/2.4.x/Assets" target="_blank">Assets with RequireJS, Digest, Etag, Gzip, Fingerprint</a>.</li>
+						<li><a href="http://www.playframework.com/documentation/2.5.x/Assets" target="_blank">Assets with RequireJS, Digest, Etag, Gzip, Fingerprint</a>.</li>
 					</ul>
 				</li>
 				<li>It shoud explain:
@@ -109,6 +109,11 @@
 					the RequestHandler object for the whole project. It determines the subdomain for each
 					request (admin or web) and delegates its behaviour to the corresponding subproject.
 				</li>
+				<li>
+					<a href="#code/app/ErrorHandler.scala" class="shortcut">app/ErrorHandler.scala</a> <em>(used when whole project is running)</em>:
+					the ErrorHandler object for the whole project. It determines the subdomain for each
+					request (admin or web) and delegates its behaviour to the corresponding subproject.
+				</li>
 			</ul>
 
 			<p>And for running each subproject independently:</p>
@@ -133,7 +138,7 @@
 					<em>(used when only this subproject is running)</em>: routes file for this subproject.
 				</li>
 				<li>
-					<a href="#code/modules/admin/app/ErrorHandler.scala" class="shortcut">modules/[subproject]/app/ErrorHandler.scala</a>
+					<a href="#code/modules/admin/app/utils/ErrorHandler.scala" class="shortcut">modules/[subproject]/app/utils/ErrorHandler.scala</a>
 					<em>(used when only this subproject is running)</em>: the ErrorHandler object for this subproject.
 				</li>
 			</ul>
@@ -182,7 +187,7 @@
 
 			<p>
 				Please check the <em>Splitting the route file</em> section within the documentation page about
-				<a href="http://www.playframework.com/documentation/2.4.x/SBTSubProjects" target="_blank">SBT Sub-projects</a>.
+				<a href="http://www.playframework.com/documentation/2.5.x/SBTSubProjects" target="_blank">SBT Sub-projects</a>.
 			</p>
 		</div>
 		<div>
@@ -303,7 +308,7 @@ RjsKeys.mainModule := s"main-$module"</pre>
 	
 			<p>
 				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.4.x/Assets" target="_blank">Assets</a>,
+				<a href="http://www.playframework.com/documentation/2.5.x/Assets" target="_blank">Assets</a>,
 				the tutorial <code>play-2.3-highlights</code> in Activator UI, or the website of
 				<a href="http://requirejs.org" target="_blank">RequireJS</a>.
 			</p>
@@ -392,7 +397,7 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 		<div>
 			<h2>ErrorHandler</h2>
 			
-			<p>As we did with <a href="#code/app/RequestHandler.scala" class="shortcut">RequestHandler</a>, we also need to do the same for <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a>. In this case, we have a global <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a> and  specific <a href="#code/modules/admin/app/ErrorHandler.scala" class="shortcut">admin.ErrorHandler</a> and <a href="#code/modules/web/app/ErrorHandler.scala" class="shortcut">web.ErrorHandler</a>.</p>
+			<p>As we did with <a href="#code/app/RequestHandler.scala" class="shortcut">RequestHandler</a>, we also need to do the same for <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a>. In this case, we have a global <a href="#code/app/ErrorHandler.scala" class="shortcut">ErrorHandler</a> and  specific <a href="#code/modules/admin/app/utils/ErrorHandler.scala" class="shortcut">admin.ErrorHandler</a> and <a href="#code/modules/web/app/utils/ErrorHandler.scala" class="shortcut">web.ErrorHandler</a>.</p>
 			
 			<p>When running the whole project, the global one will determine the subdomain for each request and delegate its behaviour to the corresponding subproject. Remember that is necessary to declare each specific <code>ErrorHandler</code> withing the corresponding configuration file.</p>
 		</div>
@@ -406,9 +411,9 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 	
 <pre>val commonDependencies = Seq(
   ...
-  "org.webjars" % "jquery" % "2.1.4",
-  "org.webjars" % "bootstrap" % "3.3.5",
-  "org.webjars" % "requirejs" % "2.1.19"
+  "org.webjars" % "jquery" % "3.1.0",
+  "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
+  "org.webjars" % "requirejs" % "2.3.1"
   ...
 )</pre>
 
@@ -419,7 +424,7 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 			</p>
 
 <pre>libraryDependencies ++= Common.commonDependencies ++: Seq(
-  "org.webjars" % "bootswatch-cerulean" % "3.3.4+1"
+  "org.webjars" % "bootswatch-cerulean" % "3.3.5+4"
 )</pre>
 
 			<p>
@@ -459,7 +464,7 @@ GET     /common/img/*file			controllers.web.Assets.commonImg(path="/public/lib/c
 
 			<p>
 				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.4.x/AssetsCoffeeScript" target="_blank">CoffeeScript</a>.
+				<a href="http://www.playframework.com/documentation/2.5.x/AssetsCoffeeScript" target="_blank">CoffeeScript</a>.
 			</p>
 		</div>
 		<div>
@@ -501,7 +506,7 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 
 			<p>
 				For more information, go to the documentation page about
-				<a href="http://www.playframework.com/documentation/2.4.x/AssetsLess" target="_blank">LESS</a>.
+				<a href="http://www.playframework.com/documentation/2.5.x/AssetsLess" target="_blank">LESS</a>.
 			</p>
 		</div>
 		<div>
@@ -632,9 +637,9 @@ excludeFilter in (Assets, LessKeys.less) := "_*.less"</pre>
 
 			<p>
 				Please, check the documentation about
-				<a href="http://www.playframework.com/documentation/2.4.x/ProductionConfiguration" target="_blank">Production Configuration</a>
+				<a href="http://www.playframework.com/documentation/2.5.x/ProductionConfiguration" target="_blank">Production Configuration</a>
 				for more parameters. And also check about
-				<a href="http://www.playframework.com/documentation/2.4.x/ApplicationSecret" target="_blank">Application Secret</a>.</p>	
+				<a href="http://www.playframework.com/documentation/2.5.x/ApplicationSecret" target="_blank">Application Secret</a>.</p>	
 		</div>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-## Multidomain Seed [Play 2.4 - Scala]
+## Multidomain Seed [Play 2.5 - Scala]
 
 __Note:__ All this information is also available as a tutorial if you run the app using [Activator UI](http://typesafe.com/platform/getstarted).
 
@@ -18,7 +18,7 @@ Then, we have the following objectives:
 * It should be a template ready to use with the following features:
   * [Webjars](http://www.webjars.org).
   * [CoffeeScript](http://coffeescript.org) and [LESS](http://lesscss.org) Assets.
-  * [Assets with RequireJS, Digest, Etag, Gzip, Fingerprint](http://www.playframework.com/documentation/2.4.x/Assets).
+  * [Assets with RequireJS, Digest, Etag, Gzip, Fingerprint](http://www.playframework.com/documentation/2.5.x/Assets).
 * It shoud explain:
   * How to share every common code to avoid duplications (models, controllers, views, CoffeeScript, LESS, ...).
   * How to use it for development, test and production.
@@ -28,10 +28,10 @@ And please, don't forget starring this project if you consider it has been usefu
 
 Also check my other projects:
 
-* [Play Multidomain Auth [Play 2.4 - Scala]](https://github.com/adrianhurt/play-multidomain-auth)
+* [Play Multidomain Auth [Play 2.5 - Scala]](https://github.com/adrianhurt/play-multidomain-auth)
 * [Play-Bootstrap - Play library for Bootstrap [Scala & Java]](https://adrianhurt.github.io/play-bootstrap)
-* [Play Silhouette Credentials Seed](https://github.com/adrianhurt/play-silhouette-credentials-seed)
-* [Play API REST Template [Play 2.4 - Scala]](https://github.com/adrianhurt/play-api-rest-seed)
+* [Play Silhouette Credentials Seed [Play 2.5 - Scala]](https://github.com/adrianhurt/play-silhouette-credentials-seed)
+* [Play API REST Template [Play 2.5 - Scala]](https://github.com/adrianhurt/play-api-rest-seed)
 
 ### Multiproject
 
@@ -61,7 +61,6 @@ play-multidomain-seed
    └ admin
      └ build.sbt
      └ app
-       └ ErrorHandler.scala
        └ assets
          └ javascripts
            └ main-admin.coffee
@@ -79,6 +78,8 @@ play-multidomain-seed
 	       └ admin
              └ index.scala.html
              └ main.scala.html
+       └ utils
+         └ ErrorHandler.scala
      └ conf
        └ admin-dev.conf
        └ admin-prod.conf
@@ -96,7 +97,9 @@ Let's try to explain briefly how it is configured. For running the whole project
 
 * `build.sbt`: configures root project and declares every subproject.
 * `conf/root-dev.conf` _(used when whole project is running)_: the default one. In the next section it is explained in detail.
+* `conf/routes` _(used when whole project is running)_: routes file for the whole project. It simply imports the routes file of every subproject.
 * `app/RequestHandler.scala` _(used when whole project is running)_: the RequestHandler object for the whole project. It determines the subdomain for each request (admin or web) and delegates its behaviour to the corresponding subproject.
+* `app/ErrorHandler.scala` _(used when whole project is running)_: the ErrorHandler object for the whole project. It determines the subdomain for each request (admin or web) and delegates its behaviour to the corresponding subproject.
 
 And for running each subproject independently:
 
@@ -104,7 +107,7 @@ And for running each subproject independently:
 * `modules/[subproject]/conf/[subproject]-dev.conf` _(used when only this subproject is running)_: the default one, it declares the routes file for the subproject while running or testing only this subproject.
 * `modules/[subproject]/conf/[subproject]-prod.conf` _(used when only this subproject is running)_: it declares the routes file for the subproject while distributing only this subproject.
 * `modules/[subproject]/conf/[subproject].routes` _(used when only this subproject is running)_: routes file for this subproject.
-* `modules/[subproject]/app/ErrorHandler.scala` _(used when only this subproject is running)_: the ErrorHandler object for this subproject.
+* `modules/[subproject]/app/utils/ErrorHandler.scala` _(used when only this subproject is running)_: the ErrorHandler object for this subproject.
 
 The common code for every  `build.sbt` file is defined at:
 
@@ -120,7 +123,7 @@ And the rest of relevant folders and files are:
 * `modules/[subproject]/public/`: folder for every public file of this subproject.
 * `modules/[subproject]/test/`: folder for every test file for this subproject.
 
-Please check the _Splitting the route file_ section within the documentation page about [SBT Sub-projects](http://www.playframework.com/documentation/2.4.x/SBTSubProjects).
+Please check the _Splitting the route file_ section within the documentation page about [SBT Sub-projects](http://www.playframework.com/documentation/2.5.x/SBTSubProjects).
 
 ### Configuration files
 
@@ -167,7 +170,7 @@ Now we just simply need to declare the RequireJS as:
 
     <script data-main="@routes.Assets.versioned("javascripts/main-web.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")" type="text/javascript"></script>
 
-For more information, go to the documentation page about [Assets](http://www.playframework.com/documentation/2.4.x/Assets), the tutorial `play-2.3-highlights` in Activator UI, or the website of [RequireJS](http://requirejs.org).
+For more information, go to the documentation page about [Assets](http://www.playframework.com/documentation/2.5.x/Assets), the tutorial `play-2.3-highlights` in Activator UI, or the website of [RequireJS](http://requirejs.org).
 
 #### Custom AssetsBuilder
 
@@ -268,16 +271,16 @@ The common [Webjars](http://www.webjars.org) are included within the field `Comm
 
     val commonDependencies = Seq(
       ...
-      "org.webjars" % "jquery" % "2.1.4",
-      "org.webjars" % "bootstrap" % "3.3.5",
-      "org.webjars" % "requirejs" % "2.1.19"
+      "org.webjars" % "jquery" % "3.1.0",
+      "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
+      "org.webjars" % "requirejs" % "2.3.1",
       ...
     )
 
 And the specific webjars for a subproject are declared in the file `modules/[subproject]/build.sbt`. For example, for the `web` subproject:
 
     libraryDependencies ++= Common.commonDependencies ++: Seq(
-      "org.webjars" % "bootswatch-cerulean" % "3.3.4+1"
+      "org.webjars" % "bootswatch-cerulean" % "3.3.5+4"
     )
 
 Then, to access to their resources simply remember they are inside `lib` folder. For the previous examples:
@@ -298,7 +301,7 @@ To access to the compiled file you simply have to reference to its JS equivalent
 
     <script src="@routes.Assets.js("main.js")"></script>
 
-For more information, go to the documentation page about [CoffeeScript](http://www.playframework.com/documentation/2.4.x/AssetsCoffeeScript).
+For more information, go to the documentation page about [CoffeeScript](http://www.playframework.com/documentation/2.5.x/AssetsCoffeeScript).
 
 ### LESS
 
@@ -319,7 +322,7 @@ To access to the compiled file you simply have to reference to its CSS equivalen
 
     <link rel="stylesheet" media="screen" href="@routes.Assets.css("main.css")">
 
-For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.4.x/AssetsLess).
+For more information, go to the documentation page about [LESS](http://www.playframework.com/documentation/2.5.x/AssetsLess).
 
 ### Internationalization: how to split messages files
 
@@ -410,11 +413,11 @@ If you would like to test the whole project in production mode, you should be ab
 
     [play-multidomain-seed] $ start
 
-Please, check the documentation about [Production Configuration](http://www.playframework.com/documentation/2.4.x/ProductionConfiguration) for more parameters. And also check about [Application Secret](http://www.playframework.com/documentation/2.4.x/ApplicationSecret).
+Please, check the documentation about [Production Configuration](http://www.playframework.com/documentation/2.5.x/ProductionConfiguration) for more parameters. And also check about [Application Secret](http://www.playframework.com/documentation/2.5.x/ApplicationSecret).
 
 ### Thanks to
 
-http://www.playframework.com/documentation/2.4.x/SBTSubProjects
+http://www.playframework.com/documentation/2.5.x/SBTSubProjects
 
 http://eng.kifi.com/multi-project-deployment-in-play-framework/ -> https://github.com/kifi/multiproject
 

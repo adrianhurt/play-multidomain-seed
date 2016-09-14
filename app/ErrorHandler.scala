@@ -4,15 +4,17 @@ import play.api.mvc._
 import play.api.mvc.Results._
 import play.api.routing.Router
 import scala.concurrent.Future
-import javax.inject._
+import javax.inject.{ Singleton, Inject, Provider }
 
+@Singleton
 class ErrorHandler @Inject() (
     env: Environment,
     config: Configuration,
     sourceMapper: OptionalSourceMapper,
     router: Provider[Router],
     webErrorHandler: web.ErrorHandler,
-    adminErrorHandler: admin.ErrorHandler) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {
+    adminErrorHandler: admin.ErrorHandler
+) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {
 
   /*
 	* Gets the subdomain: "admin" o "www"

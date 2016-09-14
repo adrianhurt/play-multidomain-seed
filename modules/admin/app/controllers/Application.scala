@@ -4,13 +4,15 @@ import models.admin._
 import play.api._
 import play.api.mvc._
 import play.api.i18n.{ I18nSupport, MessagesApi, Messages, Lang }
-import javax.inject.Inject
+import net.ceedubs.ficus.Ficus._
+import javax.inject.{ Inject, Singleton }
 
-class Application @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
+@Singleton
+class Application @Inject() (val messagesApi: MessagesApi, conf: Configuration) extends Controller with I18nSupport {
 
   def index = Action { implicit request =>
     val computers = ComputerAdmin.list
-    Ok(views.html.admin.index(Messages("admin.subtitle"), computers))
+    Ok(views.html.admin.index(Messages("admin.subtitle"), computers, configThisFile = conf.underlying.as[String]("this.file")))
   }
 
   def selectLang(lang: String) = Action { implicit request =>
