@@ -23,6 +23,7 @@ object Common {
     resolvers ++= Seq(
       "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
       "Atlassian Releases" at "https://maven.atlassian.com/public/",
+      Resolver.jcenterRepo,
       Resolver.sonatypeRepo("snapshots")
     )
   )
@@ -55,7 +56,7 @@ object Common {
     "org.webjars" % "jquery" % "3.1.0",
     "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery"),
     "org.webjars" % "requirejs" % "2.3.1",
-    "com.iheart" %% "ficus" % "1.2.6"
+    "com.iheart" %% "ficus" % "1.3.2"
     // Add here more common dependencies:
     // jdbc,
     // anorm,
