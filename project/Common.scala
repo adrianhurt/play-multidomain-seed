@@ -17,7 +17,7 @@ object Common {
     name := theName,
     organization := "com.myweb",
     version := "1.0-SNAPSHOT",
-    scalaVersion := "2.11.7",
+    scalaVersion := "2.12.3",
     doc in Compile <<= target.map(_ / "none"),
     scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-language:reflectiveCalls", "-language:postfixOps", "-language:implicitConversions"),
     resolvers ++= Seq(
@@ -50,6 +50,7 @@ object Common {
   )
 	
   val commonDependencies = Seq(
+    guice,
     cache,
     ws,
     specs2 % Test,

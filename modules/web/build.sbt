@@ -1,3 +1,5 @@
+import scalariform.formatter.preferences._
+
 Common.serviceSettings("web", messagesFilesFrom = Seq("common", "web"))
 
 // Add here the specific settings for this module
@@ -10,4 +12,7 @@ libraryDependencies ++= Common.commonDependencies ++: Seq(
 	// anorm
 )
 
-scalariformSettings
+scalariformPreferences := scalariformPreferences.value
+	.setPreference(AlignSingleLineCaseStatements, true)
+	.setPreference(DoubleIndentConstructorArguments, true)
+	.setPreference(DanglingCloseParenthesis, Preserve)

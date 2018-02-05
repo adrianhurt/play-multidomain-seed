@@ -1,3 +1,5 @@
+import scalariform.formatter.preferences._
+
 Common.appSettings(messagesFilesFrom = Seq("common", "admin", "web"))
 
 
@@ -12,4 +14,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala).aggregate(common
 
 libraryDependencies ++= Common.commonDependencies
 
-scalariformSettings
+scalariformPreferences := scalariformPreferences.value
+  .setPreference(AlignSingleLineCaseStatements, true)
+  .setPreference(DoubleIndentConstructorArguments, true)
+  .setPreference(DanglingCloseParenthesis, Preserve)

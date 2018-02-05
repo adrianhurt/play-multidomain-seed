@@ -8,7 +8,7 @@ import net.ceedubs.ficus.Ficus._
 import javax.inject.{ Inject, Singleton }
 
 @Singleton
-class Application @Inject() (val messagesApi: MessagesApi, conf: Configuration) extends Controller with I18nSupport {
+class Application @Inject() (conf: Configuration) extends InjectedController with I18nSupport {
 
   def index = Action { implicit request =>
     val computers = ComputerAdmin.list

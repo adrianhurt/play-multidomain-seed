@@ -1,4 +1,4 @@
-## Multidomain Seed [Play 2.5 - Scala]
+## Multidomain Seed [Play 2.6 - Scala]
 
 __Note:__ All this information is also available as a tutorial if you run the app using [Activator UI](http://typesafe.com/platform/getstarted).
 
