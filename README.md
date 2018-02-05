@@ -1,6 +1,6 @@
 ## Multidomain Seed [Play 2.6 - Scala]
 
-__Note:__ This is just a quick migration from adrianhurt's play-multidomain-seed to Play 2.6.
+__Note:__ This is just a quick migration of adrianhurt's play-multidomain-seed to Play 2.6. The rest - including these docs - is unchanged.
 
 Let's suppose you want to develop a whole project which has two different services: the typical public webpage and the private admin one. You also want a specific subdomain for the admin webpage, so we will have:
 
