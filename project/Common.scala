@@ -51,7 +51,7 @@ object Common {
 	
   val commonDependencies = Seq(
     guice,
-    cache,
+    ehcache,
     ws,
     specs2 % Test,
     "org.webjars" % "jquery" % "3.1.0",
