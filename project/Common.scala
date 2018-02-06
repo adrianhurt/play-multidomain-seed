@@ -18,7 +18,9 @@ object Common {
     organization := "com.myweb",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.12.3",
-    doc in Compile <<= target.map(_ / "none"),
+    // suppress API doc generation
+    sources in (Compile, doc) := Seq.empty,
+    publishArtifact in (Compile, packageDoc) := false,
     scalacOptions ++= Seq("-feature", "-deprecation", "-unchecked", "-language:reflectiveCalls", "-language:postfixOps", "-language:implicitConversions"),
     resolvers ++= Seq(
       "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
@@ -31,13 +33,13 @@ object Common {
   def appSettings (messagesFilesFrom: Seq[String]) = settings(appName) ++: Seq(
     javaOptions += s"-Dconfig.resource=root-dev.conf",
     messagesGenerator in Compile := messagesGenerate(messagesFilesFrom, baseDirectory.value, resourceManaged.value, streams.value.log),
-    resourceGenerators in Compile <+= (messagesGenerator in Compile)
+    resourceGenerators in Compile += (messagesGenerator in Compile)
   )
   // Settings for every module, i.e. for every subproject
   def moduleSettings (module: String) = settings(module) ++: Seq(
     javaOptions += s"-Dconfig.resource=$module-dev.conf",
     sharedConfFilesReplicator in Compile := sharedConfFilesReplicate(baseDirectory.value / ".." / "..", resourceManaged.value, streams.value.log),
-    resourceGenerators in Compile <+= (sharedConfFilesReplicator in Compile)
+    resourceGenerators in Compile += (sharedConfFilesReplicator in Compile)
   )
   // Settings for every service, i.e. for admin and web subprojects
   def serviceSettings (module: String, messagesFilesFrom: Seq[String]) = moduleSettings(module) ++: Seq(
@@ -46,7 +48,7 @@ object Common {
     pipelineStages := Seq(rjs, digest, gzip),
     RjsKeys.mainModule := s"main-$module",
     messagesGenerator in Compile := messagesGenerate(messagesFilesFrom, baseDirectory.value / ".." / "..", resourceManaged.value, streams.value.log),
-    resourceGenerators in Compile <+= (messagesGenerator in Compile)
+    resourceGenerators in Compile += (messagesGenerator in Compile)
   )
 	
   val commonDependencies = Seq(
@@ -88,7 +90,7 @@ object Common {
   */
 	
   val conf = ConfigFactory.parseFile(new File("conf/shared.dev.conf")).resolve()
-  val langs = scala.collection.JavaConversions.asScalaBuffer(conf.getStringList("play.i18n.langs"))
+  val langs = scala.collection.JavaConverters.asScalaBuffer(conf.getStringList("play.i18n.langs"))
 	
   lazy val messagesGenerator = taskKey[Seq[File]]("Generate the messages resource files.")
 	
