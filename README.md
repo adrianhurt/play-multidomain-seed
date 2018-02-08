@@ -1,6 +1,6 @@
-## Multidomain Seed [Play 2.5 - Scala]
+## Multidomain Seed [Play 2.6 - Scala]
 
-__Note:__ All this information is also available as a tutorial if you run the app using [Activator UI](http://typesafe.com/platform/getstarted).
+__Note:__ This is just a quick migration of adrianhurt's play-multidomain-seed to Play 2.6 and sbt 1.0. The rest - including these docs - is unchanged.
 
 Let's suppose you want to develop a whole project which has two different services: the typical public webpage and the private admin one. You also want a specific subdomain for the admin webpage, so we will have:
 
@@ -11,7 +11,7 @@ And let's also suppose you prefer to have these services isolated in your produc
 
 Then, we have the following objectives:
 
-* Development should be simple. `activator run` should be enough to run all services at the same time.
+* Development should be simple. `sbt run` should be enough to run all services at the same time.
 * Common code, dependencies and modules should be easily shared.
 * We should be able to compile, test and run each service separately in development and production.
 * We should distribute each service separately.
@@ -352,7 +352,7 @@ First of all, to get access to `admin` subdomain you will need modify your `/etc
 
 Then, simply execute:
 
-    $ activator run
+    $ sbt run
 
 or
 
@@ -390,7 +390,7 @@ _Note:_ remember to set the absolute path to common resources folder with `rsc.f
 
 Simply execute:
 
-    $ activator dist
+    $ sbt dist
 
 or
 

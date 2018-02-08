@@ -1,3 +1,5 @@
+import scalariform.formatter.preferences._
+
 Common.moduleSettings("common")
 
 // Add here the specific settings for this module
@@ -5,4 +7,7 @@ Common.moduleSettings("common")
 
 libraryDependencies ++= Common.commonDependencies
 
-scalariformSettings
+scalariformPreferences := scalariformPreferences.value
+  .setPreference(AlignSingleLineCaseStatements, true)
+  .setPreference(DoubleIndentConstructorArguments, true)
+  .setPreference(DanglingCloseParenthesis, Preserve)

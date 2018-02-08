@@ -24,13 +24,13 @@ class ErrorHandler @Inject() (
   // 404 - page not found error
   override def onNotFound(request: RequestHeader, message: String): Future[Result] = getSubdomain(request) match {
     case "admin" => adminErrorHandler.onNotFound(request, message)
-    case _ => webErrorHandler.onNotFound(request, message)
+    case _       => webErrorHandler.onNotFound(request, message)
   }
 
   // 500 - internal server error
   override def onProdServerError(request: RequestHeader, exception: UsefulException) = getSubdomain(request) match {
     case "admin" => adminErrorHandler.onProdServerError(request, exception)
-    case _ => webErrorHandler.onProdServerError(request, exception)
+    case _       => webErrorHandler.onProdServerError(request, exception)
   }
 
 }

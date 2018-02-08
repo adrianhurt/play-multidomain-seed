@@ -1,14 +1,16 @@
 import javax.inject.Inject
+
 import play.api.http._
-import play.api.mvc.{ RequestHeader, EssentialAction, Action, Results }
+import play.api.mvc.request.RequestTarget
+import play.api.mvc.{ Action, EssentialAction, RequestHeader, Results }
 import play.api.routing.Router
 
 class VirtualHostRequestHandler @Inject() (
-  errorHandler: HttpErrorHandler,
-  configuration: HttpConfiguration,
-  filters: HttpFilters,
-  webRouter: web.Routes,
-  adminRouter: admin.Routes
+    errorHandler: HttpErrorHandler,
+    configuration: HttpConfiguration,
+    filters: HttpFilters,
+    webRouter: web.Routes,
+    adminRouter: admin.Routes
 ) extends DefaultHttpRequestHandler(
   webRouter, errorHandler, configuration, filters
 ) {
@@ -23,7 +25,7 @@ class VirtualHostRequestHandler @Inject() (
   */
   override def routeRequest(request: RequestHeader) = getSubdomain(request) match {
     case "admin" => adminRouter.routes.lift(rewriteAssets("admin", request))
-    case _ => webRouter.routes.lift(rewriteAssets("web", request))
+    case _       => webRouter.routes.lift(rewriteAssets("web", request))
   }
 
   /*
@@ -35,11 +37,11 @@ class VirtualHostRequestHandler @Inject() (
     val js = s"""/js/(.*)""".r
     val img = s"""/img/(.*)""".r
     request.path match {
-      case pub(file) => request.copy(path = s"/lib/$subproject/$file")
-      case css(file) => request.copy(path = s"/lib/$subproject/stylesheets/$file")
-      case js(file) => request.copy(path = s"/lib/$subproject/javascripts/$file")
-      case img(file) => request.copy(path = s"/lib/$subproject/images/$file")
-      case _ => request
+      case pub(file) => request.withTarget(request.target.withPath(s"/lib/$subproject/$file"))
+      case css(file) => request.withTarget(request.target.withPath(s"/lib/$subproject/stylesheets/$file"))
+      case js(file)  => request.withTarget(request.target.withPath(s"/lib/$subproject/javascripts/$file"))
+      case img(file) => request.withTarget(request.target.withPath(s"/lib/$subproject/images/$file"))
+      case _         => request
     }
   }
 }
